@@ -3,5 +3,6 @@
 !/.gitignore
 !/README.md
 !/labs/
-!/labs/**
+/labs/*
+!/labs/01_ciclo_modelops_e_pipeline_dati_modello_deploy.md
 /demo/
