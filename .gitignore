@@ -1,0 +1,14 @@
+# Publish only the course README and lab handouts.
+/*
+!/.gitignore
+!/README.md
+!/materiali_didattici/
+/materiali_didattici/*
+!/materiali_didattici/labs/
+!/materiali_didattici/labs/**
+/demo/
+
+# Lab solutions stay private by default. Remove the leading "#" from both
+# rules below when the solutions are ready to be published.
+# !/materiali_didattici/lab_solutions/
+# !/materiali_didattici/lab_solutions/**
