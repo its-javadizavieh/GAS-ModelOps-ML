@@ -2,8 +2,8 @@
 
 ## Obiettivo
 
-- mappare il ciclo ModelOps end-to-end e indicare il primo gate di automazione.
-- Collegare il risultato pratico ai micro-argomenti: Ciclo completo: Dati -> Modello -> Deploy; Principi CI/CD ed automazione per ML.
+- Mappare il ciclo ModelOps end-to-end (dati -> modello -> deploy) e indicare il primo gate di automazione CI/CD.
+- Collegare il risultato pratico ai micro-argomenti: Ciclo completo Dati -> Modello -> Deploy; Principi CI/CD ed automazione per ML.
 
 ## Durata (timebox)
 
@@ -20,47 +20,41 @@
 
 ## Scenario
 
-- Il team lavora su ciclo completo dati, modello, deploy e primo collegamento CI/CD in una sessione uniforme da 4 ore.
-- L'obiettivo e produrre evidenze operative semplici, leggibili e riusabili nel project work o nella verifica.
-- Ogni risorsa locale, container o servizio cloud eventualmente creato deve essere chiuso o rimosso a fine attivita.
+- Un collega ha allenato un classificatore ieri ottenendo accuracy 0.89, ma oggi rilanciando lo stesso comando ottiene 0.81 e nessuno sa dire se e cambiato il dataset, i parametri o l'ambiente.
+- Il tuo gruppo deve costruire una mappa minima del ciclo dati -> modello -> deploy con un identificativo per ogni run, cosi il problema diventa diagnosticabile invece che un mistero.
+- Alla fine del lab il team deve anche proporre il primo gate CI/CD: una condizione automatica che impedirebbe di "promuovere" un modello peggiore di quello attuale.
 
 ## Step (numerati)
 
-1. Leggi i micro-argomenti assegnati alla sessione e riscrivi il problema operativo in una frase.
-2. Prepara una tabella con componenti, input, output, evidenze e rischio principale per ciclo completo dati, modello, deploy e primo collegamento CI/CD.
-3. Esegui una mini-demo, una simulazione locale o una checklist guidata usando Python, notebook o IDE, Git, terminale.
-4. Documenta una decisione tecnica con motivazione, metrica o vincolo osservabile.
-5. Esegui cleanup e annota nel deliverable cosa e stato chiuso, rimosso o lasciato come placeholder.
+1. Crea un file `data.csv` fittizio (o usa un dataset tabellare semplice) e uno script `train.py --data data.csv --out model.pkl` che stampi almeno una metrica (es. accuracy) a fine training.
+2. Esegui `train.py` due volte cambiando un solo parametro (es. random seed o una colonna esclusa) e annota le due metriche ottenute: questo dimostra la non ripetibilita se non tracci input e configurazione.
+3. Costruisci una tabella "run log" con colonne: id run, dataset usato, parametri, metrica ottenuta, path del modello salvato.
+4. Definisci per iscritto un gate CI/CD minimo, es. "il modello viene promosso solo se accuracy >= soglia del run precedente e il file `model.pkl` esiste".
+5. Simula l'esecuzione del gate a mano sulle due run del punto 2: dichiara quale run avrebbe superato il gate e perche.
+6. Esegui il cleanup e annota nel deliverable cosa hai rimosso o lasciato come placeholder.
 
 ## Output atteso
 
-- Un file Markdown, notebook, tabella o screenshot commentato con le decisioni prese.
-- Evidenze minime su metriche, versioni, logica di deploy, monitoraggio, sicurezza o valutazione in base alla sessione.
+- Un run log (tabella) con almeno due run confrontabili tra loro.
+- La definizione scritta del primo gate CI/CD e l'esito della sua applicazione simulata.
 - Nota finale con limiti, fallback usato e cleanup eseguito.
 
 ## Checkpoint
 
-- Il risultato risponde all'obiettivo della sessione e non introduce componenti fuori dal micro.
-- Le decisioni sono motivate con metriche, vincoli, costi, rischi o impatto operativo.
-- Il gruppo sa spiegare cosa cambierebbe passando da prototipo ad ambiente reale.
+- Il run log permette di capire, senza rileggere codice, quale run ha prodotto quale metrica.
+- Il gate CI/CD proposto e verificabile (una condizione booleana chiara), non generico ("controllare che vada bene").
+- Il gruppo sa spiegare cosa manca oggi per rendere il ciclo davvero riproducibile (es. versione dataset, seed, ambiente).
 
 ## Troubleshooting rapido
 
-- Se una libreria Python manca, descrivi il passaggio con pseudo-output e continua con la simulazione locale.
-- Se Docker, cloud o dashboard non sono disponibili, usa console, tabella Markdown o screenshot guida come fallback.
-- Se un comando resta bloccato, interrompi il processo, annota l'errore e passa alla verifica concettuale.
-- Se compaiono dati personali o segreti, rimuovili dal materiale e sostituiscili con valori fittizi.
+- Se `train.py` non produce output stabile tra due run identiche, verifica che il seed casuale sia fissato esplicitamente nel codice.
+- Se manca un dataset reale, genera un CSV sintetico con poche righe (es. `pandas` + valori casuali) invece di bloccare il lab.
+- Se il file `model.pkl` non viene scritto, controlla i permessi della cartella di output prima di sospettare un bug nello script.
+- Se due run identiche danno metriche diverse senza motivo apparente, sospetta una libreria che introduce non-determinismo (es. split train/test senza seed).
 
 ## Cleanup obbligatorio
 
-- Ferma server locali, notebook kernel, processi FastAPI, container Docker, dashboard o script lasciati in esecuzione.
-- Rimuovi immagini, volumi, file temporanei, token, credenziali o dataset copiati quando non servono alla consegna.
-- In cloud o servizi a pagamento, elimina endpoint, job, bucket, istanze, dashboard e risorse create per evitare costi.
+- Rimuovi i file `model.pkl` generati durante le prove e i CSV temporanei creati per il test.
+- Cancella eventuali notebook kernel o processi Python lasciati attivi dopo le esecuzioni ripetute di `train.py`.
+- Elimina cronologie di run o log intermedi che non fanno parte del deliverable finale.
 - Conferma nel deliverable che il cleanup e stato completato o indica cosa non e stato possibile rimuovere.
-
-## Parole chiave Google (screenshot/guide)
-
-- ciclo completo dati, modello, deploy e primo collegamento CI/CD ModelOps guida
-- Ciclo ModelOps e Pipeline Dati Modello Deploy tutorial
-- Python, notebook o IDE, Git, terminale documentation
-- cleanup risorse cloud docker model serving
