@@ -228,8 +228,8 @@ exit code 1, che blocca l'esecuzione dello stadio `train` grazie a `&&`.
 ## Comandi provati
 
 ~~~bash
-cd "/home/hjvdz/Desktop/ModelOps e Machine Learning/labs/lab 02"
-VENV_PYTHON="/home/hjvdz/Desktop/ModelOps e Machine Learning/labs/.venv/bin/python"
+cd "/Desktop/ModelOps e Machine Learning/labs/lab 02"
+VENV_PYTHON="/Desktop/ModelOps e Machine Learning/labs/.venv/bin/python"
 
 "$VENV_PYTHON" --version
 "$VENV_PYTHON" -m pytest tests/ -q
