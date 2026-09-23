@@ -9,6 +9,7 @@
 !/labs/01_ciclo_modelops_e_pipeline_dati_modello_deploy.md
 !/labs/02_ci_cd_automazione_workflow_e_pipeline.md
 !/labs/03_api_docker_e_strategie_di_deploy.md
+!/labs/04_serving_fastapi_docker_e_model_registry.md
 
 !/lab_solutions/sol_01_ciclo_modelops_e_pipeline_dati_modello_deploy.md
 !/lab_solutions/sol_02_ci_cd_automazione_workflow_e_pipeline.md
