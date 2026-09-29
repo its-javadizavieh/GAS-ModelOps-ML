@@ -137,6 +137,15 @@ python3 train.py --data data.csv --out model_b.pkl --seed 7
 # run: seed=7 accuracy=0.9 model=model_b.pkl
 ```
 
+Windows PowerShell:
+
+```powershell
+py -3 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python train.py --data data.csv --out model_a.pkl --seed 42
+python train.py --data data.csv --out model_b.pkl --seed 7
+```
+
 Output verificato eseguendo davvero i due comandi (non stimato): con questo dataset
 sintetico la run B (seed=7) risulta piu accurata della run A (seed=42) — la varianza
 tra run identiche a parte il seed e' proprio il punto didattico del lab.
@@ -180,6 +189,15 @@ if __name__ == "__main__":
 python3 gate.py
 # gate: model_b.pkl vs baseline model_a.pkl -> PROMOSSA
 # (exit code 0: utile per collegare il gate a un vero step CI/CD)
+```
+
+Windows PowerShell:
+
+```powershell
+python gate.py
+# Dopo la consegna, se i modelli di prova non servono:
+Remove-Item model_a.pkl, model_b.pkl -ErrorAction SilentlyContinue
+deactivate
 ```
 
 ## Template operativo
