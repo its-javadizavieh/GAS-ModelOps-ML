@@ -16,20 +16,29 @@
 
 ## Esempio di deliverable compilato
 
-|    # | Elemento               | Evidenza sintetica                                                     |
-| ---: | ----------------------- | --------------------------------------------------------------------------- |
-|    1 | model_v2 registrato     | accuracy 0.8889, path `model_v2.pkl`, stato "promosso"                      |
-|    2 | model_v3 registrato     | accuracy 0.5, path `model_v3.pkl`, stato "scartato" (sotto soglia 0.85)       |
-|    3 | Endpoint /predict       | risposta `{"prediction": 0, "model_version": "v2"}` su richiesta valida      |
-|    4 | Errore input non valido | risposta 422 su campo mancante, nessuna predizione restituita                |
+|    # | Elemento                | Evidenza sintetica                                                                |
+| ---: | ----------------------- | --------------------------------------------------------------------------------- |
+|    1 | model_v2 registrato     | accuracy 0.8889, path `model_v2.pkl`, stato "promosso"                            |
+|    2 | model_v3 registrato     | accuracy 0.5, path `model_v3.pkl`, stato "scartato" (sotto soglia 0.85)           |
+|    3 | Endpoint /predict       | risposta `{"prediction": 0, "model_version": "v2"}` su richiesta valida           |
+|    4 | Errore input non valido | risposta 422 su campo mancante, nessuna predizione restituita                     |
 |    5 | Decisione documentata   | model_v3 non promosso, model_v2 resta servito, motivazione: metrica insufficiente |
 
 ## Codice della soluzione
 
-Struttura usata per la verifica (adattata da `demo/demo_04_serving_registry/`, il
-demo piu completo per questa sessione — stesso pattern train/app/Dockerfile, dataset
-diverso per avere due versioni con metriche nettamente distinte come chiede lo
-Step 1):
+Salva questo contenuto come `requirements.txt` nella cartella del lab:
+
+```text
+fastapi>=0.110,<1
+uvicorn[standard]>=0.29,<1
+httpx>=0.27,<1
+scikit-learn>=1.4,<2
+numpy>=1.26,<3
+joblib>=1.3,<2
+```
+
+Struttura della soluzione: training di due versioni, registry, servizio FastAPI e
+Dockerfile. Le due versioni usano lo stesso dataset e hanno metriche confrontabili:
 
 ```
 lab04/
@@ -206,6 +215,14 @@ def predict(payload: PredictRequest) -> dict:
 
 Test richiesto dallo Step 4, eseguito davvero con `uvicorn` + client HTTP:
 
+Crea e attiva l'ambiente virtuale su Linux/macOS dalla cartella del lab:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python3 -m pip install -r requirements.txt
+```
+
 ```bash
 uvicorn app:app --port 8000 &
 python3 -c "
@@ -216,6 +233,27 @@ print(httpx.post('http://127.0.0.1:8000/predict', json={}).status_code)
 "
 ```
 
+Windows PowerShell:
+
+```powershell
+py -3 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+python train.py
+python build_registry.py
+$server = Start-Process -FilePath (Join-Path $PWD ".venv\Scripts\python.exe") -ArgumentList "-m", "uvicorn", "app:app", "--port", "8000" -PassThru
+Start-Sleep -Seconds 2
+$features = @(13.2,1.78,2.14,11.2,100.0,2.65,2.76,0.26,1.28,4.38,1.05,3.4,1050.0)
+$body = @{ features = $features } | ConvertTo-Json -Compress
+Invoke-RestMethod -Uri http://127.0.0.1:8000/predict -Method Post -ContentType "application/json" -Body $body
+try {
+    Invoke-RestMethod -Uri http://127.0.0.1:8000/predict -Method Post -ContentType "application/json" -Body '{}'
+} catch {
+    $_.Exception.Response.StatusCode.value__
+}
+Stop-Process -Id $server.Id
+```
+
 Output verificato:
 
 ```
@@ -223,8 +261,7 @@ Output verificato:
 422 {'detail': 'campo mancante o non numerico'}
 ```
 
-`Dockerfile` (adattato da `demo/demo_04_serving_registry/Dockerfile`, stesso pattern
-"dipendenze poi codice poi artefatti"):
+`Dockerfile` - installa le dipendenze e copia il codice e gli artefatti del modello:
 
 ```dockerfile
 FROM python:3.11-slim
@@ -252,6 +289,17 @@ curl -s -X POST http://127.0.0.1:8000/predict -H "Content-Type: application/json
      -d '{"features":[13.2,1.78,2.14,11.2,100.0,2.65,2.76,0.26,1.28,4.38,1.05,3.4,1050.0]}'
 ```
 
+Windows PowerShell:
+
+```powershell
+docker build -t lab04-serving .
+docker run -d --name lab04-test -p 8000:8000 lab04-serving
+Invoke-RestMethod -Uri http://127.0.0.1:8000/predict -Method Post -ContentType "application/json" -Body $body
+docker rm -f lab04-test
+docker rmi lab04-serving
+deactivate
+```
+
 Output verificato (build riuscita, stessa risposta del test locale):
 
 ```
@@ -270,10 +318,10 @@ Cleanup eseguito subito dopo la verifica: `docker rm -f lab04-test && docker rmi
 - Problema operativo: nessuno sa quale versione modello risponde in produzione
 
 ## Registry
-| Versione | Path            | Metrica | Stato      |
-| -------- | --------------- | ------- | ---------- |
-| v2       | model_v2.pkl    | 0.8889  | promosso   |
-| v3       | model_v3.pkl    | 0.5     | scartato   |
+| Versione | Path         | Metrica | Stato    |
+| -------- | ------------ | ------- | -------- |
+| v2       | model_v2.pkl | 0.8889  | promosso |
+| v3       | model_v3.pkl | 0.5     | scartato |
 
 ## Endpoint /predict
 - Modello caricato all'avvio: model_v2

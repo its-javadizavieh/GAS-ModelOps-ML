@@ -163,6 +163,13 @@ if __name__ == "__main__":
 
 Sequenza completa richiesta dallo Step 5 (output verificato eseguendo davvero i comandi):
 
+Crea e attiva l'ambiente virtuale su Linux/macOS dalla cartella del lab:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
 ```bash
 python3 pipeline.py --stage validate
 # ...
@@ -174,6 +181,18 @@ python3 pipeline.py --stage train
 
 python3 pipeline.py --stage gate
 # [GATE] accuracy=0.86 soglia=0.75 -> PROMOSSO
+```
+
+Windows PowerShell:
+
+```powershell
+py -3 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install pytest
+python -m pytest tests -q
+python pipeline.py --stage validate
+if ($LASTEXITCODE -eq 0) { python pipeline.py --stage train }
+if ($LASTEXITCODE -eq 0) { python pipeline.py --stage gate }
 ```
 
 Fallimento simulato richiesto dallo Step 6 (colonna `label` rimossa da `data.csv`),
@@ -188,6 +207,14 @@ python3 pipeline.py --stage validate && python3 pipeline.py --stage train
 # 2 failed, 1 passed in 0.01s
 # [VALIDATE] FAIL: dataset non valido, la pipeline si ferma qui.
 # (exit code 1: "&&" impedisce che "--stage train" venga anche solo lanciato)
+```
+
+Windows PowerShell:
+
+```powershell
+python pipeline.py --stage validate
+if ($LASTEXITCODE -eq 0) { python pipeline.py --stage train }
+# Ripristina data.csv dopo la prova.
 ```
 
 Output verificato eseguendo davvero i comandi (non stimato): con schema valido la

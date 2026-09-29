@@ -129,6 +129,13 @@ if __name__ == "__main__":
 
 Esecuzione delle due run richieste dal lab (terminale):
 
+Crea e attiva l'ambiente virtuale su Linux/macOS dalla cartella del lab:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
 ```bash
 python3 train.py --data data.csv --out model_a.pkl --seed 42
 # run: seed=42 accuracy=0.82 model=model_a.pkl

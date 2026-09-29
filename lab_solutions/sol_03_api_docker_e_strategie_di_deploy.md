@@ -26,14 +26,82 @@
 
 ## Codice della soluzione
 
-Punteggio della decisione (Step 1-2) verificato eseguendo davvero
-`demo/demo_03_api_docker/deploy_decision.py` sullo scenario `sanita` (dati sanitari
-sensibili, budget limitato, nessun team infra interno) — script riusato cosi com'e,
-nessun adattamento necessario perche calcola esattamente il confronto pesato
-richiesto dagli step 1-2 del lab:
+`deploy_decision.py` calcola il confronto pesato richiesto dagli step 1-2 del lab
+per lo scenario `sanita` (dati sanitari sensibili, budget limitato, nessun team infra interno):
+
+Crea e attiva l'ambiente virtuale su Linux/macOS dalla cartella del lab:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python3 -m pip install -r requirements.txt
+```
+
+`deploy_decision.py` - valuta le tre opzioni con punteggi da 1 a 5. I pesi
+rappresentano controllo dei dati, costo, competenze operative e tempo di avvio:
+
+```python
+#!/usr/bin/env python3
+"""Confronto pesato delle opzioni di deploy per lo scenario sanitario."""
+import argparse
+
+WEIGHTS = {
+    "controllo_dati": 0.30,
+    "costo": 0.20,
+    "competenze_interne": 0.30,
+    "tempo_avvio": 0.20,
+}
+
+# Punteggio piu alto = opzione piu adatta al vincolo.
+SCORES = {
+    "SaaS": {"controllo_dati": 3.1, "costo": 3.7,
+             "competenze_interne": 4.0, "tempo_avvio": 3.5},
+    "cloud": {"controllo_dati": 3.5, "costo": 3.2,
+              "competenze_interne": 2.8, "tempo_avvio": 3.4},
+    "on-prem": {"controllo_dati": 5.0, "costo": 2.0,
+                "competenze_interne": 1.1, "tempo_avvio": 1.0},
+}
+
+def weighted_score(ratings):
+    return round(sum(WEIGHTS[criterion] * rating
+                     for criterion, rating in ratings.items()), 2)
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--scenario", choices=["sanita"], required=True)
+    args = parser.parse_args()
+
+    ranked = sorted(
+        ((name, weighted_score(ratings)) for name, ratings in SCORES.items()),
+        key=lambda item: item[1],
+        reverse=True,
+    )
+    winner = ranked[0][0]
+    print(f"=== Scenario: {args.scenario} ===")
+    print("Dati sanitari sensibili, budget limitato, nessun team infra interno")
+    print()
+    for name, score in ranked:
+        print(f"  {name:<10} punteggio pesato = {score:.2f}"
+              f"{' <-- scelta' if name == winner else ''}")
+    print(f"\n>>> Decisione: {winner}")
+    print(">>> Motivazione: punteggio piu alto sui criteri pesati per QUESTO scenario.")
+    print(">>> Nota: nessuna opzione vince sempre, cambia lo scenario e cambia la scelta.")
+
+if __name__ == "__main__":
+    main()
+```
 
 ```bash
 python3 deploy_decision.py --scenario sanita
+```
+
+Windows PowerShell:
+
+```powershell
+py -3 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+python deploy_decision.py --scenario sanita
 ```
 
 Output verificato (non stimato):
@@ -54,8 +122,8 @@ Dati sanitari sensibili, budget limitato, nessun team infra interno
 Il punteggio pesato conferma la decisione della tabella comparativa: SaaS (3.57)
 batte cloud (3.21) e on-prem (2.43) su questo scenario specifico.
 
-`app.py` - contratto `/predict` richiesto dallo Step 3, adattato dal pattern FastAPI
-del demo di Sessione 04 (payload tipizzato + gestione esplicita dell'errore 422):
+`app.py` - contratto `/predict` richiesto dallo Step 3, con payload tipizzato
+e gestione esplicita dell'errore 422:
 
 ```python
 #!/usr/bin/env python3
@@ -107,6 +175,19 @@ print(r.status_code, r.json())
 "
 ```
 
+Windows PowerShell:
+
+```powershell
+$server = Start-Process -FilePath (Join-Path $PWD ".venv\Scripts\python.exe") -ArgumentList "-m", "uvicorn", "app:app", "--port", "8000" -PassThru
+Start-Sleep -Seconds 2
+Invoke-RestMethod -Uri http://127.0.0.1:8000/predict -Method Post -ContentType "application/json" -Body '{"feature_1":6.0,"feature_2":7.0}'
+try {
+    Invoke-RestMethod -Uri http://127.0.0.1:8000/predict -Method Post -ContentType "application/json" -Body '{"feature_1":6.0}'
+} catch {
+    $_.Exception.Response.StatusCode.value__
+}
+```
+
 Output verificato:
 
 ```
@@ -118,6 +199,12 @@ Kill server:
 
 ```bash
 pkill -f "uvicorn app:app"
+```
+
+Windows PowerShell:
+
+```powershell
+Stop-Process -Id $server.Id
 ```
 
 
@@ -144,6 +231,7 @@ CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
 ```
 fastapi>=0.110
 uvicorn[standard]>=0.29
+httpx>=0.27,<1
 ```
 
 Verifica richiesta dallo Step 5: `docker build` e' stato eseguito davvero in questo
@@ -166,6 +254,23 @@ curl -s -o /dev/null -w "%{http_code}\n" \
   -X POST http://127.0.0.1:8000/predict \
   -H "Content-Type: application/json" \
   -d '{"feature_1": 6.0}'
+```
+
+Windows PowerShell:
+
+```powershell
+docker build -t lab03-scoring-service .
+docker run -d --name lab03-test -p 8000:8000 lab03-scoring-service
+docker ps
+Invoke-RestMethod -Uri http://127.0.0.1:8000/predict -Method Post -ContentType "application/json" -Body '{"feature_1":6.0,"feature_2":7.0}'
+try {
+    Invoke-RestMethod -Uri http://127.0.0.1:8000/predict -Method Post -ContentType "application/json" -Body '{"feature_1":6.0}'
+} catch {
+    $_.Exception.Response.StatusCode.value__
+}
+docker rm -f lab03-test
+docker rmi lab03-scoring-service
+deactivate
 ```
 
 Output verificato (build riuscita, container avviato, stesse risposte del test locale):
@@ -214,7 +319,7 @@ Cleanup eseguito subito dopo la verifica: `docker rm -f lab03-test && docker rmi
 
 ## Esempio sintetico
 
-- Decisione corretta: scegliere l'opzione che bilancia TUTTI i vincoli dello scenario, non solo quello piu vistoso. Qui i vincoli sono tre (dati sensibili, budget limitato, nessun team infra) e nessuno da solo decide: e' la combinazione a spostare la scelta verso SaaS invece che on-prem. Uno script di supporto alla decisione con criteri pesati (`demo/demo_03_api_docker/deploy_decision.py`) arriva alla stessa conclusione per questo identico scenario.
+- Decisione corretta: scegliere l'opzione che bilancia TUTTI i vincoli dello scenario, non solo quello piu vistoso. Qui i vincoli sono tre (dati sensibili, budget limitato, nessun team infra) e nessuno da solo decide: e' la combinazione a spostare la scelta verso SaaS invece che on-prem. Lo script `deploy_decision.py` documenta il confronto pesato per questo scenario.
 - Evidenza minima: tabella comparativa applicata al caso specifico, non generica, piu contratto API con caso di errore esplicito.
 - Fallback accettabile: se Docker non e installato, validare il Dockerfile per confronto con un esempio ufficiale, senza eseguire la build.
 - Cleanup atteso: rimozione di immagini e container di prova costruiti durante la verifica del Dockerfile.
