@@ -59,7 +59,7 @@ from pathlib import Path
 
 def load_dataset(path: str) -> list[tuple[float, float, int]]:
     """Carica un CSV esistente con colonne f1, f2, label."""
-    # Step 1: verifica che il dataset fornito dal docente/studente esista.
+    # Step 1: verifica che il dataset di input esista.
     p = Path(path)
     if not p.exists():
         raise FileNotFoundError(
@@ -238,7 +238,7 @@ deactivate
 
 - Decisione corretta: promuovere la run B (0.9) su A (0.82) perche rispetta la soglia definita dal gate (metrica_nuova >= metrica_precedente), documentando che la differenza viene dal seed e non da un cambio di dati o codice.
 - Evidenza minima: run log con almeno due righe confrontabili e un gate applicato esplicitamente, non solo dichiarato a parole.
-- Fallback accettabile: se manca un dataset reale, il docente distribuisce un CSV sintetico con colonne `f1`, `f2`, `label`; lo script non deve generarlo automaticamente durante il training.
+- Fallback accettabile: se manca un dataset reale, usa il CSV sintetico incluso nella cartella con colonne `f1`, `f2`, `label`; lo script non deve generarlo automaticamente durante il training.
 - Cleanup atteso: rimozione dei file `.pkl` di prova e dei CSV temporanei non citati nel deliverable finale.
 
 ## Checkpoint risolto
