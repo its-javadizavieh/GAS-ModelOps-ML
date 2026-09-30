@@ -219,11 +219,11 @@ Crea e attiva l'ambiente virtuale su Linux/macOS dalla cartella del lab:
 
 ```bash
 python3 -m venv .venv
-source .venv/bin/activate
-python3 -m pip install -r requirements.txt
-```
 
-```bash
+source .venv/bin/activate
+
+python3 -m pip install -r requirements.txt
+
 uvicorn app:app --port 8000 &
 python3 -c "
 import httpx
@@ -237,10 +237,15 @@ Windows PowerShell:
 
 ```powershell
 py -3 -m venv .venv
+
 .\.venv\Scripts\Activate.ps1
+
 python -m pip install -r requirements.txt
+
 python train.py
+
 python build_registry.py
+
 $server = Start-Process -FilePath (Join-Path $PWD ".venv\Scripts\python.exe") -ArgumentList "-m", "uvicorn", "app:app", "--port", "8000" -PassThru
 Start-Sleep -Seconds 2
 $features = @(13.2,1.78,2.14,11.2,100.0,2.65,2.76,0.26,1.28,4.38,1.05,3.4,1050.0)
@@ -284,7 +289,9 @@ disponibile) per verificare che l'immagine funzioni end-to-end:
 
 ```bash
 docker build -t lab04-serving .
+
 docker run -d --name lab04-test -p 8000:8000 lab04-serving
+
 curl -s -X POST http://127.0.0.1:8000/predict -H "Content-Type: application/json" \
      -d '{"features":[13.2,1.78,2.14,11.2,100.0,2.65,2.76,0.26,1.28,4.38,1.05,3.4,1050.0]}'
 ```
@@ -293,10 +300,15 @@ Windows PowerShell:
 
 ```powershell
 docker build -t lab04-serving .
+
 docker run -d --name lab04-test -p 8000:8000 lab04-serving
+
 Invoke-RestMethod -Uri http://127.0.0.1:8000/predict -Method Post -ContentType "application/json" -Body $body
+
 docker rm -f lab04-test
+
 docker rmi lab04-serving
+
 deactivate
 ```
 
