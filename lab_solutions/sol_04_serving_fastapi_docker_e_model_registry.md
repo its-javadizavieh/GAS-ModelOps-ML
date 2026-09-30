@@ -122,6 +122,13 @@ model_v3 accuracy=0.5
 `build_registry.py` - Step 2 e Step 5: registry minimale piu gate di promozione su
 `model_v3` con soglia esplicita 0.85:
 
+Esegui prima `train.py`: crea i modelli e i file JSON con le metriche dentro
+`artifacts/`. Poi esegui `build_registry.py`: legge quelle metriche, scrive
+`registry.json` nella cartella corrente e registra l'esito del gate per v3.
+Con le metriche dell'esempio, v2 resta promosso e v3 viene scartato.
+Questo script non avvia FastAPI e non cambia automaticamente il modello servito:
+in questa soluzione `app.py` carica esplicitamente v2.
+
 ```python
 #!/usr/bin/env python3
 """Lab 04 - registry minimale (Step 2) + gate di promozione su model_v3 (Step 5)."""
@@ -168,7 +175,6 @@ v3   model_v3.pkl     accuracy=0.5     scartato
 
 === Gate promozione model_v3 (soglia 0.85) ===
 accuracy model_v3=0.5 -> SCARTATO
->>> model_v2 resta la versione attiva.
 ```
 
 `app.py` - Step 3: endpoint `/predict` che carica `model_v2` all'avvio e dichiara
@@ -190,7 +196,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
 ARTIFACTS = Path(__file__).parent / "artifacts"
-ACTIVE_VERSION = "v2"  # deciso dal gate del registry: v3 e' stato scartato
+ACTIVE_VERSION = "v2"  # scelta esplicita: nell'esempio v3 non supera il gate
 
 app = FastAPI(title="ModelOps Lab 04 - Serving")
 
@@ -213,7 +219,7 @@ def predict(payload: PredictRequest) -> dict:
     return {"prediction": prediction, "model_version": metadata["version"]}
 ```
 
-Test richiesto dallo Step 4, eseguito davvero con `uvicorn` + client HTTP:
+Sequenza di esecuzione e richieste HTTP dello Step 4:
 
 Crea e attiva l'ambiente virtuale su Linux/macOS dalla cartella del lab:
 
@@ -224,13 +230,28 @@ source .venv/bin/activate
 
 python3 -m pip install -r requirements.txt
 
-uvicorn app:app --port 8000 &
+python3 train.py
+python3 build_registry.py
+
+python3 -m uvicorn app:app --port 8000 &
+SERVER_PID=$!
 python3 -c "
+import time
 import httpx
+for attempt in range(100):
+    try:
+        httpx.get('http://127.0.0.1:8000/openapi.json', timeout=1).raise_for_status()
+        break
+    except httpx.HTTPError:
+        time.sleep(0.2)
+else:
+    raise SystemExit('API non disponibile: controlla i log di uvicorn.')
 features = [13.2,1.78,2.14,11.2,100.0,2.65,2.76,0.26,1.28,4.38,1.05,3.4,1050.0]
 print(httpx.post('http://127.0.0.1:8000/predict', json={'features': features}).json())
 print(httpx.post('http://127.0.0.1:8000/predict', json={}).status_code)
 "
+kill "$SERVER_PID"
+wait "$SERVER_PID" 2>/dev/null || true
 ```
 
 Windows PowerShell:
