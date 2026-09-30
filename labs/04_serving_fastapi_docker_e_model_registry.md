@@ -3,7 +3,7 @@
 ## Obiettivo
 
 - Costruire un endpoint FastAPI `/predict` che serve un modello e restituisce anche la versione del modello caricato, con un registry minimale (anche solo file/tabella) per tracciare le versioni.
-- Collegare il risultato pratico ai micro-argomenti: Demo pratica deploy e serving modello con FastAPI+Docker; Cos'e il model registry, versionare modelli/dati.
+- Collegare il risultato pratico ai micro-argomenti: Deploy e serving del modello con FastAPI+Docker; Cos'e il model registry, versionare modelli/dati.
 
 ## Durata (timebox)
 
