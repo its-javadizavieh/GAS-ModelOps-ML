@@ -41,7 +41,7 @@ Il calendario mantiene 60 ore: incontri 1–12 da 4 ore, progetto da 8 ore in du
 
 Per ogni lezione il docente condivide il PDF e, al momento del laboratorio, il relativo file Markdown e i CSV indicati nel lab. Per i laboratori di esercitazione le soluzioni vengono condivise dopo il tentativo degli studenti. Il Lab 13 guida il project work finale: gli studenti realizzano e consegnano la propria implementazione.
 
-Per Lab 10: CSV testuale per il percorso Hugging Face e CSV cifre per confronto/fallback. Per Lab 13: scegliere un soggetto dal [catalogo dei progetti finali](labs/progetti_finali/README.md) e condividere il lab più la cartella assegnata (README, dataset.csv e richieste_monitoraggio.csv). Tutti i soggetti, incluso il benchmark, hanno la propria coppia CSV in progetti_finali/.
+Per Lab 10: CSV testuale per il percorso Hugging Face e CSV cifre per confronto/fallback. Per Lab 13: scegliere un soggetto dal [catalogo dei progetti finali](labs/progetti_finali/README.md) e condividere il lab più la cartella assegnata (README, dataset.csv e richieste_monitoraggio.csv). Tutti gli otto soggetti sintetici hanno la propria coppia CSV in progetti_finali/.
 
 ## 👨‍💻 Author
 
