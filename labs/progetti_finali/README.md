@@ -19,9 +19,9 @@ Tutti i materiali dei soggetti sono raccolti qui: otto dataset sintetici. Il gru
 
 La lezione di **giovedì 12 novembre 2026, dalle 12:00 alle 18:00**, è dedicata alla presentazione dei project work.
 
-- **12:00–13:00:** al massimo un'ora per completare gli ultimi dettagli e preparare la demo.
-- **Dalle 13:00:** presentazioni dei gruppi, all'interno della lezione che termina alle 18:00.
-- **Entro le 13:00:** progetto, documentazione e presentazione devono essere pronti per essere mostrati e consegnati al docente.
+- **14:00–15:00:** al massimo un'ora per completare gli ultimi dettagli e preparare la demo.
+- **Dalle 15:00:** presentazioni dei gruppi, all'interno della lezione che termina alle 18:00.
+- **Entro le 15:00:** progetto, documentazione e presentazione devono essere pronti per essere mostrati e consegnati al docente.
 
 Arrivate con il lavoro principale già svolto. L'ora iniziale serve a rifinire il progetto e controllare i materiali; organizzate lo sviluppo prima di questa data. Ogni componente presenta il proprio contributo. L'ordine e i tempi dei singoli gruppi saranno organizzati dal docente.
 
