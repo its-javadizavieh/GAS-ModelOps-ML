@@ -4,15 +4,15 @@ Il [Lab 13](../13_project_work_pipeline_serving_monitoring_e_aggiornamento.md) Ã
 
 Tutti i materiali dei soggetti sono raccolti qui: sei dataset sintetici e un benchmark pubblico. Il gruppo realizza il proprio codice, documenta le scelte e presenta le evidenze del percorso ModelOps.
 
-| N. | Soggetto e scheda | Provenienza | Righe train / validation | target = 1 |
-| --- | --- | --- | --- | --- |
-| 1 | [Abbandono clienti](01_churn_clienti/README.md) | Sintetica | 800 / 200 | Abbandono entro 30 giorni |
-| 2 | [Manutenzione macchinari](02_manutenzione_macchinari/README.md) | Sintetica | 800 / 200 | Guasto entro 7 giorni |
-| 3 | [Ritardi consegne](03_ritardi_consegne/README.md) | Sintetica | 800 / 200 | Consegna dopo la scadenza |
-| 4 | [Resi e-commerce](04_resi_ecommerce/README.md) | Sintetica | 800 / 200 | Reso entro 30 giorni dalla consegna |
-| 5 | [Anomalie energetiche](05_anomalie_energetiche/README.md) | Sintetica | 800 / 200 | Anomalia nelle prossime 24 ore |
-| 6 | [Cancellazioni alberghiere](06_cancellazioni_prenotazioni/README.md) | Sintetica | 800 / 200 | Cancellazione prima dell'arrivo |
-| 7 | [Classificazione tabulare: Breast Cancer](07_classificazione_breast_cancer/README.md) | Benchmark pubblico | 455 / 114 | Classe benigna del benchmark |
+| N.  | Soggetto e scheda                                                                     | Provenienza        | Righe train / validation | target = 1                          |
+| --- | ------------------------------------------------------------------------------------- | ------------------ | ------------------------ | ----------------------------------- |
+| 1   | [Abbandono clienti](01_churn_clienti/README.md)                                       | Sintetica          | 800 / 200                | Abbandono entro 30 giorni           |
+| 2   | [Manutenzione macchinari](02_manutenzione_macchinari/README.md)                       | Sintetica          | 800 / 200                | Guasto entro 7 giorni               |
+| 3   | [Ritardi consegne](03_ritardi_consegne/README.md)                                     | Sintetica          | 800 / 200                | Consegna dopo la scadenza           |
+| 4   | [Resi e-commerce](04_resi_ecommerce/README.md)                                        | Sintetica          | 800 / 200                | Reso entro 30 giorni dalla consegna |
+| 5   | [Anomalie energetiche](05_anomalie_energetiche/README.md)                             | Sintetica          | 800 / 200                | Anomalia nelle prossime 24 ore      |
+| 6   | [Cancellazioni alberghiere](06_cancellazioni_prenotazioni/README.md)                  | Sintetica          | 800 / 200                | Cancellazione prima dell'arrivo     |
+| 7   | [Classificazione tabulare: Breast Cancer](07_classificazione_breast_cancer/README.md) | Benchmark pubblico | 455 / 114                | Classe benigna del benchmark        |
 
 ## Materiali per ciascun gruppo
 
