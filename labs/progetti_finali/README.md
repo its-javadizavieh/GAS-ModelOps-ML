@@ -1,6 +1,6 @@
 # Soggetti per il project work finale di gruppo
 
-Il [Lab 13](../13_project_work_pipeline_serving_monitoring_e_aggiornamento.md) è la guida comune per costruire il progetto finale. Ogni gruppo sceglie un soggetto o riceve l'assegnazione del docente e lavora sulla relativa cartella.
+Il [Lab 13](../13_project_work_pipeline_serving_monitoring_e_aggiornamento.md) è la guida comune per costruire il progetto finale. Ogni gruppo sceglie un soggetto e lavora sulla relativa cartella.
 
 Tutti i materiali dei soggetti sono raccolti qui: sei dataset sintetici e un benchmark pubblico. Il gruppo realizza il proprio codice, documenta le scelte e presenta le evidenze del percorso ModelOps.
 
