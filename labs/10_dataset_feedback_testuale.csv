@@ -1,0 +1,145 @@
+record_id,split,text,label
+text_001,train,The search feature is easy to use.,1
+text_002,train,The search feature is fast and reliable.,1
+text_003,train,The search feature is clear and helpful.,1
+text_004,train,The search feature works perfectly.,1
+text_005,train,The search feature is pleasant to use.,1
+text_006,train,The search feature is very convenient.,1
+text_007,train,The search feature is hard to use.,0
+text_008,train,The search feature is slow and unreliable.,0
+text_009,train,The search feature is confusing and frustrating.,0
+text_010,train,The search feature keeps failing.,0
+text_011,train,The search feature is unpleasant to use.,0
+text_012,train,The search feature is very inconvenient.,0
+text_013,train,The checkout page is easy to use.,1
+text_014,train,The checkout page is fast and reliable.,1
+text_015,train,The checkout page is clear and helpful.,1
+text_016,train,The checkout page works perfectly.,1
+text_017,train,The checkout page is pleasant to use.,1
+text_018,train,The checkout page is very convenient.,1
+text_019,train,The checkout page is hard to use.,0
+text_020,train,The checkout page is slow and unreliable.,0
+text_021,train,The checkout page is confusing and frustrating.,0
+text_022,train,The checkout page keeps failing.,0
+text_023,train,The checkout page is unpleasant to use.,0
+text_024,train,The checkout page is very inconvenient.,0
+text_025,train,The notification panel is easy to use.,1
+text_026,train,The notification panel is fast and reliable.,1
+text_027,train,The notification panel is clear and helpful.,1
+text_028,train,The notification panel works perfectly.,1
+text_029,train,The notification panel is pleasant to use.,1
+text_030,train,The notification panel is very convenient.,1
+text_031,train,The notification panel is hard to use.,0
+text_032,train,The notification panel is slow and unreliable.,0
+text_033,train,The notification panel is confusing and frustrating.,0
+text_034,train,The notification panel keeps failing.,0
+text_035,train,The notification panel is unpleasant to use.,0
+text_036,train,The notification panel is very inconvenient.,0
+text_037,train,The account setup is easy to use.,1
+text_038,train,The account setup is fast and reliable.,1
+text_039,train,The account setup is clear and helpful.,1
+text_040,train,The account setup works perfectly.,1
+text_041,train,The account setup is pleasant to use.,1
+text_042,train,The account setup is very convenient.,1
+text_043,train,The account setup is hard to use.,0
+text_044,train,The account setup is slow and unreliable.,0
+text_045,train,The account setup is confusing and frustrating.,0
+text_046,train,The account setup keeps failing.,0
+text_047,train,The account setup is unpleasant to use.,0
+text_048,train,The account setup is very inconvenient.,0
+text_049,train,The payment screen is easy to use.,1
+text_050,train,The payment screen is fast and reliable.,1
+text_051,train,The payment screen is clear and helpful.,1
+text_052,train,The payment screen works perfectly.,1
+text_053,train,The payment screen is pleasant to use.,1
+text_054,train,The payment screen is very convenient.,1
+text_055,train,The payment screen is hard to use.,0
+text_056,train,The payment screen is slow and unreliable.,0
+text_057,train,The payment screen is confusing and frustrating.,0
+text_058,train,The payment screen keeps failing.,0
+text_059,train,The payment screen is unpleasant to use.,0
+text_060,train,The payment screen is very inconvenient.,0
+text_061,train,The help center is easy to use.,1
+text_062,train,The help center is fast and reliable.,1
+text_063,train,The help center is clear and helpful.,1
+text_064,train,The help center works perfectly.,1
+text_065,train,The help center is pleasant to use.,1
+text_066,train,The help center is very convenient.,1
+text_067,train,The help center is hard to use.,0
+text_068,train,The help center is slow and unreliable.,0
+text_069,train,The help center is confusing and frustrating.,0
+text_070,train,The help center keeps failing.,0
+text_071,train,The help center is unpleasant to use.,0
+text_072,train,The help center is very inconvenient.,0
+text_073,train,The settings page is easy to use.,1
+text_074,train,The settings page is fast and reliable.,1
+text_075,train,The settings page is clear and helpful.,1
+text_076,train,The settings page works perfectly.,1
+text_077,train,The settings page is pleasant to use.,1
+text_078,train,The settings page is very convenient.,1
+text_079,train,The settings page is hard to use.,0
+text_080,train,The settings page is slow and unreliable.,0
+text_081,train,The settings page is confusing and frustrating.,0
+text_082,train,The settings page keeps failing.,0
+text_083,train,The settings page is unpleasant to use.,0
+text_084,train,The settings page is very inconvenient.,0
+text_085,train,The download tool is easy to use.,1
+text_086,train,The download tool is fast and reliable.,1
+text_087,train,The download tool is clear and helpful.,1
+text_088,train,The download tool works perfectly.,1
+text_089,train,The download tool is pleasant to use.,1
+text_090,train,The download tool is very convenient.,1
+text_091,train,The download tool is hard to use.,0
+text_092,train,The download tool is slow and unreliable.,0
+text_093,train,The download tool is confusing and frustrating.,0
+text_094,train,The download tool keeps failing.,0
+text_095,train,The download tool is unpleasant to use.,0
+text_096,train,The download tool is very inconvenient.,0
+text_097,validation,The mobile menu is simple and useful.,1
+text_098,validation,The mobile menu works smoothly.,1
+text_099,validation,The mobile menu is excellent.,1
+text_100,validation,The mobile menu is complicated and useless.,0
+text_101,validation,The mobile menu does not work.,0
+text_102,validation,The mobile menu is terrible.,0
+text_103,validation,The export button is simple and useful.,1
+text_104,validation,The export button works smoothly.,1
+text_105,validation,The export button is excellent.,1
+text_106,validation,The export button is complicated and useless.,0
+text_107,validation,The export button does not work.,0
+text_108,validation,The export button is terrible.,0
+text_109,validation,The filter panel is simple and useful.,1
+text_110,validation,The filter panel works smoothly.,1
+text_111,validation,The filter panel is excellent.,1
+text_112,validation,The filter panel is complicated and useless.,0
+text_113,validation,The filter panel does not work.,0
+text_114,validation,The filter panel is terrible.,0
+text_115,validation,The profile editor is simple and useful.,1
+text_116,validation,The profile editor works smoothly.,1
+text_117,validation,The profile editor is excellent.,1
+text_118,validation,The profile editor is complicated and useless.,0
+text_119,validation,The profile editor does not work.,0
+text_120,validation,The profile editor is terrible.,0
+text_121,test,The chat widget works wonderfully.,1
+text_122,test,The chat widget is easy and convenient.,1
+text_123,test,The chat widget makes the task enjoyable.,1
+text_124,test,The chat widget keeps crashing.,0
+text_125,test,The chat widget is difficult and annoying.,0
+text_126,test,The chat widget makes the task frustrating.,0
+text_127,test,The calendar view works wonderfully.,1
+text_128,test,The calendar view is easy and convenient.,1
+text_129,test,The calendar view makes the task enjoyable.,1
+text_130,test,The calendar view keeps crashing.,0
+text_131,test,The calendar view is difficult and annoying.,0
+text_132,test,The calendar view makes the task frustrating.,0
+text_133,test,The upload form works wonderfully.,1
+text_134,test,The upload form is easy and convenient.,1
+text_135,test,The upload form makes the task enjoyable.,1
+text_136,test,The upload form keeps crashing.,0
+text_137,test,The upload form is difficult and annoying.,0
+text_138,test,The upload form makes the task frustrating.,0
+text_139,test,The dashboard panel works wonderfully.,1
+text_140,test,The dashboard panel is easy and convenient.,1
+text_141,test,The dashboard panel makes the task enjoyable.,1
+text_142,test,The dashboard panel keeps crashing.,0
+text_143,test,The dashboard panel is difficult and annoying.,0
+text_144,test,The dashboard panel makes the task frustrating.,0
