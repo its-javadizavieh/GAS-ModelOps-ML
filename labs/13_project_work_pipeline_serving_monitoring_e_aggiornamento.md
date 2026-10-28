@@ -4,9 +4,19 @@
 
 Questo laboratorio guida il **progetto finale di gruppo**: partire da un problema, costruire una pipeline di classificazione, rendere disponibile un servizio e documentare come monitorarlo, aggiornarlo e ripristinarlo.
 
-Ogni gruppo lavora su **un soggetto** del [catalogo dei progetti finali](progetti_finali/README.md). Le fasi e le evidenze richieste sono comuni; domanda applicativa, significato delle feature, interpretazione delle classi e discussione dei risultati dipendono dal soggetto assegnato.
+Ogni gruppo lavora su **un soggetto tra gli otto disponibili** nel [catalogo dei progetti finali](progetti_finali/README.md). Le fasi e le evidenze richieste sono comuni; domanda applicativa, significato delle feature, interpretazione delle classi e discussione dei risultati dipendono dal soggetto assegnato.
 
 Il lavoro dura **8 ore in due incontri**, con checkpoint intermedi. Il gruppo scrive la propria implementazione: questa guida offre passaggi, domande e controlli, senza una soluzione completa da copiare. Potete riutilizzare quanto avete imparato nei laboratori precedenti, spiegando gli adattamenti fatti.
+
+## Presentazione del 12 novembre 2026
+
+La lezione di **giovedì 12 novembre 2026, dalle 12:00 alle 18:00**, è dedicata alla presentazione dei project work.
+
+- **12:00–13:00:** al massimo un'ora per completare gli ultimi dettagli e preparare la demo.
+- **Dalle 13:00:** presentazioni dei gruppi, all'interno della lezione che termina alle 18:00.
+- **Entro le 13:00:** progetto, documentazione e presentazione devono essere pronti per essere mostrati e consegnati al docente.
+
+Arrivate con il lavoro principale già svolto. L'ora iniziale serve a rifinire il progetto e controllare i materiali; organizzate lo sviluppo prima di questa data. Ogni componente presenta il proprio contributo. L'ordine e i tempi dei singoli gruppi saranno organizzati dal docente.
 
 ## 1. Scegliere il soggetto e leggere la scheda
 
@@ -30,6 +40,8 @@ Leggete i CSV forniti e mantenete gli split assegnati. `record_id`, `split` e `t
 Preparate Python, NumPy, scikit-learn, MLflow, FastAPI, Pydantic, HTTPX e Uvicorn. Docker è un'estensione quando disponibile. Annotate le versioni realmente usate.
 
 Create una cartella di lavoro del gruppo, per esempio `lavoro_lab13`, separata dagli input distribuiti. Al suo interno organizzate sorgenti, configurazioni, modelli, metadati, log e report. Conservate i percorsi dei CSV nella configurazione del progetto; chi riceve il README deve poter individuare gli stessi file.
+
+La scansione seguente organizza lo sviluppo del progetto prima della presentazione. Il 12 novembre resta disponibile al massimo un'ora per gli ultimi dettagli, secondo l'orario indicato sopra.
 
 Dividete i compiti tra dati/training, servizio/telemetria e aggiornamento/documentazione. Ogni parte deve essere riletta da un compagno. Tutti devono saper spiegare il flusso completo e il proprio contributo.
 

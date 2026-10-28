@@ -2,7 +2,7 @@
 
 Il [Lab 13](../13_project_work_pipeline_serving_monitoring_e_aggiornamento.md) è la guida comune per costruire il progetto finale. Ogni gruppo sceglie un soggetto e lavora sulla relativa cartella.
 
-Tutti i materiali dei soggetti sono raccolti qui: sei dataset sintetici e un benchmark pubblico. Il gruppo realizza il proprio codice, documenta le scelte e presenta le evidenze del percorso ModelOps.
+Tutti i materiali dei soggetti sono raccolti qui: otto dataset sintetici. Il gruppo realizza il proprio codice, documenta le scelte e presenta le evidenze del percorso ModelOps.
 
 | N.  | Soggetto e scheda                                                                     | Provenienza        | Righe train / validation | target = 1                          |
 | --- | ------------------------------------------------------------------------------------- | ------------------ | ------------------------ | ----------------------------------- |
@@ -12,7 +12,18 @@ Tutti i materiali dei soggetti sono raccolti qui: sei dataset sintetici e un ben
 | 4   | [Resi e-commerce](04_resi_ecommerce/README.md)                                        | Sintetica          | 800 / 200                | Reso entro 30 giorni dalla consegna |
 | 5   | [Anomalie energetiche](05_anomalie_energetiche/README.md)                             | Sintetica          | 800 / 200                | Anomalia nelle prossime 24 ore      |
 | 6   | [Cancellazioni alberghiere](06_cancellazioni_prenotazioni/README.md)                  | Sintetica          | 800 / 200                | Cancellazione prima dell'arrivo     |
-| 7   | [Classificazione tabulare: Breast Cancer](07_classificazione_breast_cancer/README.md) | Benchmark pubblico | 455 / 114                | Classe benigna del benchmark        |
+| 7 | [Escalation dei ticket IT](07_escalation_ticket_it/README.md) | Sintetica | 800 / 200 | Escalation al secondo livello entro 24 ore |
+| 8 | [Esaurimento scorte](08_esaurimento_scorte/README.md) | Sintetica | 800 / 200 | Esaurimento entro 7 giorni |
+
+## Presentazione del 12 novembre 2026
+
+La lezione di **giovedì 12 novembre 2026, dalle 12:00 alle 18:00**, è dedicata alla presentazione dei project work.
+
+- **12:00–13:00:** al massimo un'ora per completare gli ultimi dettagli e preparare la demo.
+- **Dalle 13:00:** presentazioni dei gruppi, all'interno della lezione che termina alle 18:00.
+- **Entro le 13:00:** progetto, documentazione e presentazione devono essere pronti per essere mostrati e consegnati al docente.
+
+Arrivate con il lavoro principale già svolto. L'ora iniziale serve a rifinire il progetto e controllare i materiali; organizzate lo sviluppo prima di questa data. Ogni componente presenta il proprio contributo. L'ordine e i tempi dei singoli gruppi saranno organizzati dal docente.
 
 ## Materiali per ciascun gruppo
 
