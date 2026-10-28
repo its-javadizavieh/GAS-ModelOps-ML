@@ -31,9 +31,18 @@ Labs and their solutions are released individually. Currently available:
 | [10](labs/10_fine_tuning_distillation_e_ottimizzazione.md)         | Fine-tuning, distillation e ottimizzazione       |
 | [11](labs/11_reinforcement_learning_e_rlhf.md)                     | Reinforcement Learning e RLHF                    |
 | [12](labs/12_tool_framework_mlflow_kubeflow_vertex_ai.md)          | Tool e framework: MLflow, Kubeflow, Vertex AI    |
-| [13](labs/13_project_work_pipeline_end_to_end_parte_1.md)          | Project work: pipeline end-to-end, parte 1       |
-| [14](labs/14_project_work_monitoring_aggiornamento_produzione.md)  | Project work: monitoring e aggiornamento         |
-| [15](labs/15_verifica_finale_e_presentazione_project_work.md)      | Verifica finale e presentazione project work     |
+| [13](labs/13_project_work_pipeline_serving_monitoring_e_aggiornamento.md) | Project work: pipeline, serving, monitoring e aggiornamento (8h) |
+
+## Verifica finale e distribuzione dei materiali
+
+La verifica finale prevede **quiz individuale tratto esclusivamente dai mini-esercizi delle slide e presentazione del project work di gruppo**, senza esame orale separato. I due set da 30 domande si trovano in verifiche/: PDF per la prova, Markdown con soluzioni e XML Moodle per il docente.
+
+Il calendario mantiene 60 ore: incontri 1–12 da 4 ore, progetto da 8 ore in due incontri, verifica finale da 4 ore. Non è previsto un deck separato per la verifica finale.
+
+Per ogni lezione il docente condivide il PDF e, al momento del laboratorio, il relativo file Markdown e i CSV indicati nel lab. Le soluzioni vengono condivise dopo il tentativo degli studenti.
+
+Per Lab 10: CSV testuale per il percorso Hugging Face e CSV cifre per confronto/fallback. Per Lab 13: 13_dataset_progetto_classificazione.csv e 13_dataset_richieste_monitoraggio.csv.
+
 ## 👨‍💻 Author
 
 **Seyedhossein Javadizavieh**
@@ -47,7 +56,7 @@ Labs and their solutions are released individually. Currently available:
 - **Institution**: ITS ICT Piemonte
 - **Course**: ModelOps e Machine Learning
 - **Programme**: Tecnico superiore per la digitalizzazione dei processi con soluzioni Artificial Intelligence based - Gen AI Specialist B.F. 2025/2027
-- **Duration**: 60h (15 lectures × 4h)
+- **Duration**: 60h (12 incontri da 4h, progetto da 8h, verifica da 4h)
 - **Language**: Labs in Italian
 
 ## 📄 License
