@@ -32,4 +32,6 @@
 !/lab_solutions/sol_08*
 !/lab_solutions/sol_09*
 !/lab_solutions/sol_10*
+# Keep the Lab 11 solution local until its intended release.
+/lab_solutions/sol_11*
 /demo/
