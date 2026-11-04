@@ -22,11 +22,11 @@ Arrivate con il lavoro principale già svolto. L'ora iniziale serve a rifinire i
 
 Il docente assegna il soggetto o concorda la scelta con il gruppo. Aprite la cartella corrispondente in `progetti_finali/` e leggete il suo README prima di iniziare.
 
-| Materiale | A cosa serve |
-| --- | --- |
-| Questo Lab 13 | Organizzazione, fasi di costruzione e criteri della consegna |
-| README.md del soggetto | Problema, provenienza dei dati, classi, feature, split e limiti |
-| dataset.csv del soggetto | Dati da usare per training e valutazione |
+| Materiale                                        | A cosa serve                                                          |
+| ------------------------------------------------ | --------------------------------------------------------------------- |
+| Questo Lab 13                                    | Organizzazione, fasi di costruzione e criteri della consegna          |
+| README.md del soggetto                           | Problema, provenienza dei dati, classi, feature, split e limiti       |
+| dataset.csv del soggetto                         | Dati da usare per training e valutazione                              |
 | richieste_monitoraggio.csv dello stesso soggetto | Input per osservare il servizio e provare le transizioni tra versioni |
 
 **Tutti i dataset e i payload dei progetti sono nelle rispettive cartelle di `progetti_finali/`.** Condividete nel gruppo il lab e la cartella assegnata; per svolgere il progetto basta quella cartella.
@@ -45,10 +45,10 @@ La scansione seguente organizza lo sviluppo del progetto prima della presentazio
 
 Dividete i compiti tra dati/training, servizio/telemetria e aggiornamento/documentazione. Ogni parte deve essere riletta da un compagno. Tutti devono saper spiegare il flusso completo e il proprio contributo.
 
-| Incontro | Fasi | Tempo indicativo | Checkpoint |
-| --- | --- | --- | --- |
-| Primo | S1, S2, S3 | 45 + 90 + 105 minuti | Contratto, baseline tracciata e servizio osservabile |
-| Secondo | S4, S5, S6 | 90 + 90 + 60 minuti | Decisione sulla candidata, ripristino documentato e presentazione |
+| Incontro | Fasi       | Tempo indicativo     | Checkpoint                                                        |
+| -------- | ---------- | -------------------- | ----------------------------------------------------------------- |
+| Primo    | S1, S2, S3 | 45 + 90 + 105 minuti | Contratto, baseline tracciata e servizio osservabile              |
+| Secondo  | S4, S5, S6 | 90 + 90 + 60 minuti  | Decisione sulla candidata, ripristino documentato e presentazione |
 
 ## 3. Prima del codice: scrivere una proposta breve
 
@@ -152,15 +152,15 @@ Disegnate poi il percorso **dati → training → artefatto e metadati → servi
 
 ## 5. Che cosa consegnare
 
-| Parte | Contenuto richiesto |
-| --- | --- |
-| Progetto | Sorgenti del gruppo, configurazione e dipendenze |
-| Dati e contratto | Soggetto scelto, riferimenti ai file assegnati, split, classi e ordine delle feature |
-| Esperimenti | Baseline e candidata, run, parametri, metriche e interpretazione degli errori |
-| Servizio | Contratto API, caso valido, caso non valido e livelli di esecuzione effettivamente provati |
-| Aggiornamento | Gate motivato, stato attivo, registro e prova del ripristino |
-| Documentazione | README, limiti, cleanup e contributi dei componenti |
-| Presentazione | Sintesi del problema, delle scelte e delle evidenze osservate |
+| Parte            | Contenuto richiesto                                                                        |
+| ---------------- | ------------------------------------------------------------------------------------------ |
+| Progetto         | Sorgenti del gruppo, configurazione e dipendenze                                           |
+| Dati e contratto | Soggetto scelto, riferimenti ai file assegnati, split, classi e ordine delle feature       |
+| Esperimenti      | Baseline e candidata, run, parametri, metriche e interpretazione degli errori              |
+| Servizio         | Contratto API, caso valido, caso non valido e livelli di esecuzione effettivamente provati |
+| Aggiornamento    | Gate motivato, stato attivo, registro e prova del ripristino                               |
+| Documentazione   | README, limiti, cleanup e contributi dei componenti                                        |
+| Presentazione    | Sintesi del problema, delle scelte e delle evidenze osservate                              |
 
 La valutazione considera coerenza del flusso, tracciabilità, correttezza dei controlli, interpretazione dei risultati e qualità della documentazione. Non sono richieste metriche identiche tra soggetti o gruppi, né il superamento del gate da parte della candidata.
 
