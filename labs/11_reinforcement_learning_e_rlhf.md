@@ -1,87 +1,132 @@
-# Lab 11 - Eseguire un ambiente RL e addestrare un agente
+# Lab 11 - Configurare, eseguire e osservare un agente RL
 
-## Cosa devi eseguire
+## Obiettivo e lavoro richiesto
 
-In questo laboratorio **scrivi ed esegui Python**. La parte principale consiste nell'avviare FrozenLake con Gymnasium, osservare episodi, addestrare un agente con Q-learning, salvarlo e confrontarlo con una politica casuale. Nella seconda parte esegui l'analisi delle preferenze del CSV per capire i limiti di una funzione di reward.
+Esegui il codice fornito per addestrare un agente Q-learning in FrozenLake, confrontarlo con una politica casuale e osservare il comportamento del modello ricaricato. Poi esegui il confronto tra reward e preferenze sul CSV assegnato.
 
-Il report Markdown documenta le esecuzioni. La consegna richiede anche sorgenti, log, tabella Q, grafico di apprendimento e risultati prodotti dal programma.
+**Il codice completo è incluso nella sezione «Codice fornito».** Il tuo lavoro consiste nel preparare l'ambiente, salvare gli script indicati, configurare le esecuzioni, lanciarle e documentare passaggi e risultati osservati.
 
-## Preparazione e mappa S1–S6
+## S1 - Prepara una cartella autonoma e l'ambiente
 
-Crea lavoro_lab11 direttamente in materiali_didattici, attiva Python 3.12 e salva i due blocchi nei file indicati. L'input CSV si trova in ../labs/. Prepara le dipendenze prima della lezione:
+Crea una cartella personale chiamata `lavoro_lab11` e raccogli questi file:
+
+| File | Come ottenerlo |
+| --- | --- |
+| Questo documento | Copia del materiale distribuito dal docente |
+| `11_dataset_preferenze_simulate.csv` | CSV fornito dal docente, da conservare invariato |
+| `rl_frozenlake.py` | Salva una sola volta il primo blocco Python della sezione «Codice fornito» |
+| `sol11_reward_ranking.py` | Salva una sola volta il secondo blocco Python della stessa sezione |
+
+Tutti i comandi seguenti vanno eseguiti **dalla cartella lavoro_lab11**, dove si trovano script e CSV. Questa disposizione funziona anche scaricando i soli materiali del laboratorio.
+
+Usa Python 3.12. Crea l'ambiente virtuale:
 
 ```bash
-python -m pip install 'gymnasium>=1.0,<2' numpy matplotlib
+python -m venv .venv
 ```
 
-| Passaggio | Funzione o file             | Evidenza                                               |
-| --------- | --------------------------- | ------------------------------------------------------ |
-| S1        | make_env, reset e step      | Episodio osservato e rendering testuale                |
-| S2        | evaluate con azioni casuali | Baseline su 200 episodi                                |
-| S3        | train_one                   | Aggiornamenti Q, log, configurazione e tabella salvata |
-| S4        | evaluate, replay e CLI      | Valutazione dopo ricaricamento, curva e comportamento  |
-| S5        | sol11_reward_ranking.py     | Calcolo effettivo sulle cinque coppie del CSV          |
-| S6        | Report ed evidenze          | Risultati osservati e limiti distinti per attività     |
+Attivalo con `source .venv/bin/activate` su Linux/macOS oppure `.\.venv\Scripts\Activate.ps1` in PowerShell. Scegli il comando adatto alla tua postazione, poi installa le dipendenze e registra le versioni:
 
-## Prima del codice: disegna un episodio
+```bash
+python -m pip install "gymnasium>=1.0,<2" numpy matplotlib
+python -m pip freeze > ambiente.txt
+```
 
-Disegna la griglia, scegli una sequenza di azioni e prevedi dove finirà. Distingui stato, azione, reward e condizione di fine episodio. Poi confronta la previsione con un episodio realmente eseguito.
+Non servono GPU, credenziali o modelli da scaricare. FrozenLake è incluso in Gymnasium. Se la postazione è senza rete, usa un ambiente con i pacchetti già predisposti dal docente.
 
-Prima di S5, calcola anche il caso A=(correttezza 1, 80 parole), B=(0,6, 10 parole) con reward = correttezza − 0,01 × parole. Conserverai questo confronto separato dall'addestramento dell'agente.
+**Documenta:** sistema operativo, versione Python, comando di attivazione e versione dei pacchetti. Un errore di installazione va risolto prima del training.
 
-## Costruzione guidata
+## S2 - Controlla la configurazione e fai una previsione
 
-### S1 - Avvia FrozenLake e osserva le transizioni
+Leggi la funzione `make_env` e la configurazione del training nel codice fornito:
 
-**File da costruire:** `rl_frozenlake.py`, inizialmente con la sola creazione dell'ambiente e la gestione di un episodio.
+| Impostazione | Valore iniziale | Come configurarla |
+| --- | --- | --- |
+| Ambiente | FrozenLake-v1, mappa 4×4 | Mantieni la mappa fornita per il confronto di base |
+| Stati / azioni | 16 / 4 | Dipendono dall'ambiente |
+| Episodi di training | 6000 per seed | Argomento `--episodes` |
+| Seed di training | 42, 43, 44 | Argomento `--seeds` |
+| Cartella dei risultati | rl_output | Argomento `--out`; usa un nome nuovo per ripetere il training |
+| Scivolamento | Disattivato | Aggiungi `--slippery` per l'esperimento aggiuntivo |
+| Alpha / gamma | 0,1 / 0,99 | Valori forniti in `train_one` |
+| Esplorazione | Epsilon da 1 a 0,05 | Riduzione già implementata nel codice |
+| Valutazione | 200 episodi, seed a partire da 10000 | Stesso protocollo per baseline e agente |
 
-1. Crea l'ambiente usando Gymnasium, la mappa assegnata e `is_slippery=False`.
-2. Individua cosa restituiscono reset e step. Prepara variabili distinte per observation, reward, terminated e truncated.
-3. Esegui alcune azioni e stampa stato iniziale, azione, stato successivo e reward. Usa il rendering testuale per vedere la posizione sulla griglia.
-4. Chiudi l'episodio quando terminated oppure truncated è vero e chiudi l'ambiente al termine del programma.
+La mappa ha righe SFFF, FHFH, FFFH, HFFG: S è la partenza, F il ghiaccio, H una buca e G l'obiettivo. Il reward vale 1 al goal e 0 negli altri casi; il limite è 100 passi.
 
-**Checkpoint da mostrare:** output di almeno un episodio eseguito, con i passi osservati. Uno schema disegnato da solo non dimostra che l'ambiente sia stato avviato.
+Prima di eseguire, annota quale politica ti aspetti raggiunga il goal più spesso e perché. Individua nel codice la distinzione tra `terminated` e `truncated` e il punto in cui viene aggiornata Q.
 
-**Indizio:** terminated segnala la fine prevista dal compito; truncated segnala un'interruzione come il limite di passi.
+**Documenta:** configurazione scelta e previsione iniziale. Questa lettura serve a interpretare il programma che eseguirai.
 
-### S2 - Misura una baseline casuale
+## S3 - Avvia il training e osserva gli artefatti
 
-1. Scrivi una funzione che scelga azioni casuali e accumuli reward e numero di passi per episodio.
-2. Esegui 200 episodi con seed di valutazione fissati, a partire da 10000.
-3. Salva una riga per episodio con politica, seed, ritorno totale, durata, successo e causa di fine.
-4. Calcola success rate, ritorno medio e lunghezza media. Definisci successo come raggiungimento dell'obiettivo.
+Esegui:
 
-**Checkpoint:** il programma produce risultati e un CSV. Un episodio riuscito non basta a descrivere la qualità della politica.
+```bash
+python rl_frozenlake.py train --out rl_output --episodes 6000 --seeds 42 43 44
+```
 
-**Indizio:** usa gli stessi parametri dell'ambiente e lo stesso protocollo per la futura politica addestrata. Il seed del generatore di azioni va controllato separatamente.
+Il programma esegue i tre training e, per ciascuno, valuta sia azioni casuali sia la politica Q-learning. Alla fine trovi:
 
-### S3 - Implementa e addestra Q-learning
+| Percorso | Contenuto da osservare |
+| --- | --- |
+| `rl_output/comparison.json` | Confronto random/Q-learning dei tre seed |
+| `rl_output/seed_42/training.csv` | Ritorno, durata, epsilon e successo durante il training |
+| `rl_output/seed_42/evaluation.csv` | Episodi di valutazione delle due politiche |
+| `rl_output/seed_42/q_table.npy` | Tabella Q appresa e salvata |
+| `rl_output/seed_42/config.json` | Configurazione, versioni e sintesi della valutazione |
+| `rl_output/seed_42/learning_curve.png` | Success rate di training su finestra mobile |
 
-1. Crea una tabella Q con una riga per stato e una colonna per azione, inizialmente a zero.
-2. Implementa una scelta epsilon-greedy: con probabilità epsilon esplora, altrimenti scegli un'azione con Q massimo. Gestisci i pareggi senza favorire sempre la stessa azione durante il training.
-3. Aggiorna Q a ogni transizione con la regola: valore attuale + alpha × (target − valore attuale). Il target usa reward e gamma × massimo Q dello stato successivo; se la transizione è terminale, usa il solo reward.
-4. Parti da alpha 0,1, gamma 0,99, epsilon 1 che scende fino a 0,05. Fissa questi parametri prima del confronto finale. Esegui 6000 episodi per ciascuno dei seed 42, 43 e 44.
-5. Registra ritorno, durata, epsilon e successo di ogni episodio. Salva la tabella Q e la configurazione di ciascuna esecuzione in cartelle distinte.
+Le cartelle seed_43 e seed_44 hanno la stessa struttura. Apri i grafici e controlla nei metadati se i valori Q sono cambiati. Se una cartella output esiste già, il programma la rifiuta per conservare la prova precedente: configura un nuovo nome per la ripetizione.
 
-**Checkpoint:** esistono un log di training e una tabella Q salvata. Controlla se i valori sono cambiati; se restano tutti a zero, indaga esplorazione e raggiungimento del goal.
+**Documenta:** comando usato, percorso dei risultati, success rate delle due politiche per tutti i seed e andamento della curva. Non sono richiesti numeri prestabiliti; registra anche un eventuale mancato miglioramento.
 
-**Indizio:** il limite di tempo interrompe l'episodio, ma non rende automaticamente terminale lo stato nel target Q-learning. Tratta separatamente terminated e truncated.
+## S4 - Ricarica il modello e osserva un episodio
 
-### S4 - Ricarica l'agente, valuta e mostra il comportamento
+Esegui in processi nuovi:
 
-1. Ricarica la tabella Q da disco in una nuova esecuzione del programma.
-2. Valuta la politica greedy, senza esplorazione e senza aggiornare Q, sui 200 episodi del protocollo S2.
-3. Confronta agente e baseline casuale; riporta i risultati dei tre seed di training senza scegliere soltanto il migliore.
-4. Disegna il success rate di training su finestra mobile di 100 episodi. Mostra anche un replay testuale dell'agente caricato e salvalo in un file.
-5. Se resta tempo, ripeti da una cartella nuova con `is_slippery=True`, allenando e valutando nello stesso ambiente modificato. Conserva il confronto tra configurazioni.
+```bash
+python rl_frozenlake.py evaluate --run rl_output/seed_42
+python rl_frozenlake.py demo --run rl_output/seed_42
+```
 
-**Checkpoint:** puoi mostrare il grafico e l'episodio dell'agente salvato, oltre a una tabella random/Q-learning. Non sono richiesti valori numerici prestabiliti: se il training non migliora, documenta la causa osservata.
+Il primo comando carica Q da disco, valuta senza aggiornarla e salva `evaluation_reloaded.csv` e `evaluation_reloaded.json`. Il secondo mostra il percorso testuale e salva `episode.txt` nella cartella del seed. Puoi osservare gli altri seed sostituendo il percorso passato a `--run`.
 
-**Indizio:** gli episodi di valutazione non aggiornano la politica. Valutare sulla stessa mappa con altri seed non dimostra generalizzazione a mappe nuove.
+Confronta il risultato ricaricato con quello registrato dopo il training. Spiega la differenza tra curva di training con esplorazione e valutazione greedy. Una valutazione sulla stessa mappa non dimostra generalizzazione a mappe nuove.
 
-## rl_frozenlake.py - S1–S4
+**Esperimento di configurazione:** ripeti il comando di training di S3 con una nuova cartella `--out` e con il flag `--slippery`, poi usa evaluate e demo sulla nuova cartella. Confronta i risultati dichiarando il cambiamento dell'ambiente e mantenendo uguali gli altri parametri.
 
-Il codice usa una mappa locale fissa. Non scarica dati e non usa GPU. La tabella Q viene aggiornata nell'ambiente, salvata e poi ricaricata per eseguire la politica. I risultati variano con seed e configurazione: non sono garantiti da questo documento.
+**Documenta:** file ricaricato, risultato osservato, un episodio e confronto tra configurazioni. Il rendering è testuale e funziona senza finestra grafica.
+
+## S5 - Esegui il confronto tra reward e preferenze
+
+Il CSV contiene cinque coppie A/B, annotazioni di correttezza e tono e preferenze simulate di riferimento. Non è il dataset di transizioni FrozenLake.
+
+Prima del comando, leggete soltanto domanda e testi e annotate per ogni coppia la scelta del gruppo e il motivo. Consultate punteggi e preferenze di riferimento dopo questa scelta.
+
+```bash
+python sol11_reward_ranking.py --data 11_dataset_preferenze_simulate.csv --out preference_comparison.json
+```
+
+Apri il JSON prodotto. Lo script conta le parole, calcola correttezza − 0,01 × parole − 0,5 × tono inadeguato, identifica vincitore o pareggio e misura l'accordo con il riferimento simulato.
+
+**Documenta:** scelte del gruppo, vincitori del reward e almeno un disaccordo da spiegare, se osservato. Correttezza e tono sono annotazioni: il programma non ne scopre automaticamente il significato.
+
+Mantieni distinte le due attività: il programma RL aggiorna una politica tabulare; il confronto sulle risposte applica una rubrica e non addestra un reward model o un assistente conversazionale. È a questa seconda attività che si riferiscono i mini-esercizi sulle preferenze.
+
+## S6 - Documenta e consegna
+
+Prepara un report breve con sei sezioni: ambiente, configurazione, comandi eseguiti, risultati RL, confronto delle preferenze, problemi e limiti.
+
+Allega `ambiente.txt`, configurazioni e output significativi: confronto dei seed, curve, valutazione dopo ricaricamento, replay, JSON delle preferenze e giudizi del gruppo. Includi gli script effettivamente usati se hai modificato parametri nel codice, indicando ogni modifica.
+
+Riporta risultati reali e indica le parti rimaste non eseguite. Chiudi eventuali visualizzazioni; gli ambienti sono chiusi dal programma. Conserva gli artefatti della consegna e rimuovi soltanto gli intermedi personali non necessari.
+
+## Codice fornito
+
+Copia ciascun blocco completo nel file indicato, una sola volta. Mantieni i due script separati: ciascuno ha il proprio punto di avvio.
+
+### rl_frozenlake.py
 
 ```python
 """Train, save, reload and observe a tabular Q-learning agent in Gymnasium."""
@@ -258,43 +303,7 @@ if __name__ == '__main__':
     main()
 ```
 
-### Esecuzione del percorso RL
-
-```bash
-python rl_frozenlake.py train --out rl_output --episodes 6000 --seeds 42 43 44
-python rl_frozenlake.py evaluate --run rl_output/seed_42
-python rl_frozenlake.py demo --run rl_output/seed_42
-```
-
-Ripeti evaluate e demo per gli altri seed quando vuoi osservare ciascuna esecuzione. Le valutazioni usano una politica congelata e gli stessi episodi della baseline, senza aggiornare Q. Training.csv, evaluation.csv, q_table.npy, config.json, learning_curve.png ed episode.txt sono evidenze da interpretare, non file da sostituire con valori attesi.
-
-Il grafico mostra il successo durante il training con esplorazione; la tabella finale mostra la valutazione greedy. Sono protocolli distinti. Il confronto riguarda la stessa mappa e non misura generalizzazione su mappe nuove.
-
-Per l'estensione con scivolamento usa una cartella diversa:
-
-```bash
-python rl_frozenlake.py train --out rl_slippery_output --episodes 6000 --seeds 42 43 44 --slippery
-```
-
-Questo nuovo comando allena e valuta nell'ambiente modificato. Non confrontare numeri senza dichiarare is_slippery, seed e budget di training.
-
-### S5 - Esegui il confronto tra reward e preferenze
-
-**File da costruire:** `sol11_reward_ranking.py`. La scrittura e l'esecuzione dello script fanno parte della consegna.
-
-1. Leggi le cinque coppie del CSV distribuito. Controlla che ogni pair_id abbia A e B per la stessa domanda.
-2. Prima di vedere punteggi e preferenze di riferimento, fate scegliere al gruppo A o B leggendo solo domanda e testi; conservate scelta e motivo.
-3. Conta le parole dai testi e applica la rubrica: correttezza − 0,01 × parole − 0,5 × tono inadeguato.
-4. Calcola vincitore, pareggi e accordo con la preferenza simulata di riferimento; salva il confronto prodotto dal programma. Confrontalo anche con i giudizi raccolti dal gruppo.
-5. Spiega il caso della risposta breve ma scorretta e proponi una revisione della rubrica, distinguendo ciò che hai eseguito da ciò che proponi.
-
-**Checkpoint:** la consegna contiene l'output dello script e i giudizi indipendenti del gruppo. Correttezza e tono sono annotazioni, non misure semantiche scoperte dal programma.
-
-**Indizio:** in S3 hai addestrato un agente tabulare. In S5 esegui un confronto aritmetico su risposte: questa seconda attività non addestra un reward model né un assistente conversazionale. È a questo confronto che si riferiscono i mini-esercizi sulle preferenze.
-
-## sol11_reward_ranking.py - S5
-
-Prima dell'esecuzione raccogli le preferenze del gruppo leggendo solo domande e testi. Il CSV è una fixture con cinque coppie A/B e giudizi simulati; correctness e bad_tone non sono stimati automaticamente. Il numero di parole è contato dai testi.
+### sol11_reward_ranking.py
 
 ```python
 """Testi concreti, giudizi dichiarati, reward e preferenze: nessun training RL."""
@@ -359,48 +368,8 @@ if __name__ == '__main__':
     main()
 ```
 
-```bash
-python sol11_reward_ranking.py --data ../labs/11_dataset_preferenze_simulate.csv --out preference_comparison.json
-```
+## Riferimenti
 
-### Interpretazione
-
-Nel caso su carta A vale 0,20 e B 0,50: la penalità può favorire una risposta breve ma incompleta. Nella seconda coppia del CSV emerge un disaccordo tra reward e preferenza simulata. La raccolta delle preferenze del gruppo resta un'evidenza separata dal giudizio di riferimento distribuito.
-
-S1–S4 addestrano una politica tabulare Q-learning. S5 esegue un confronto aritmetico: questo script non addestra un reward model né una politica linguistica RLHF. I mini-esercizi sul calcolo e sul confine del confronto si riferiscono a S5.
-
-## S6 - Consegna e conservazione
-
-Conserva sorgenti, versioni dei pacchetti, log dei tre seed, Q-table, curve, valutazione dopo ricaricamento, replay e confronto delle preferenze. Spiega quali dati dimostrano un aggiornamento della politica e quali dimostrano soltanto l'applicazione di una regola di reward.
-
-Gli ambienti sono chiusi con env.close; rimuovi soltanto output intermedi dopo avere conservato quelli della consegna. La presenza del codice in questa soluzione non certifica che la tua esecuzione sia stata completata: annota risultati ed errori effettivi.
-
-| Da consegnare | Evidenza richiesta |
-| --- | --- |
-| Sorgenti | Programma RL e programma reward/preferenze scritti dallo studente |
-| Ambiente | Versioni, mappa, parametri, seed e comandi realmente usati |
-| Training | CSV episodi, Q-table e configurazione per i tre seed |
-| Valutazione | Tabella random/Q-learning e risultati dopo ricaricamento |
-| Comportamento | Grafico di apprendimento e replay testuale |
-| Preferenze | Scelte motivate del gruppo e output del confronto sul CSV |
-| Report breve | Interpretazione dei risultati, problemi incontrati e limiti |
-
-Chiudi gli ambienti Gymnasium e conserva gli artefatti finali. Un report senza sorgenti e risultati di esecuzione non completa il laboratorio. Se una postazione non dispone delle dipendenze, lavora in coppia su una postazione predisposta e documenta l'ambiente usato; indica le parti rimaste non eseguite.
-
-## Sequenza di avvio dei programmi che costruisci
-
-Prevedi queste modalità nell'interfaccia dei tuoi script. Dopo avere scritto il codice, esegui dalla cartella di lavoro:
-
-1. `python rl_frozenlake.py train --out rl_output --episodes 6000 --seeds 42 43 44` per allenare e salvare le tre esecuzioni.
-2. `python rl_frozenlake.py evaluate --run rl_output/seed_42` per valutare Q ricaricata; ripeti per gli altri seed.
-3. `python rl_frozenlake.py demo --run rl_output/seed_42` per osservare e salvare un episodio.
-4. `python sol11_reward_ranking.py --data ../labs/11_dataset_preferenze_simulate.csv --out preference_comparison.json` per produrre il confronto delle preferenze.
-
-Per ripetere il training scegli una cartella output nuova e conserva quella della prova precedente. La soluzione mostra una possibile implementazione dell'interfaccia; questi comandi di avvio non contengono la logica da costruire.
-
-## Quando consultare la soluzione
-
-Tenta prima S1–S3 e conserva il tuo codice. Usa la soluzione per confrontare il passaggio in cui sei bloccato, poi riprendi il tuo programma. Il codice completo resta nel file soluzione, separato da questa guida.
-
-Riferimenti: [FrozenLake](https://gymnasium.farama.org/environments/toy_text/frozen_lake/), [API Gymnasium](https://gymnasium.farama.org/api/env/), [gestione dei limiti temporali](https://gymnasium.farama.org/tutorials/gymnasium_basics/handling_time_limits/).
-[API Env](https://gymnasium.farama.org/api/env/), [terminated e truncated](https://gymnasium.farama.org/tutorials/gymnasium_basics/handling_time_limits/).
+- [FrozenLake](https://gymnasium.farama.org/environments/toy_text/frozen_lake/)
+- [API Gymnasium](https://gymnasium.farama.org/api/env/)
+- [Terminated, truncated e limiti temporali](https://gymnasium.farama.org/tutorials/gymnasium_basics/handling_time_limits/)
