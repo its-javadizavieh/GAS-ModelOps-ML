@@ -10,12 +10,12 @@ Esegui il codice fornito per addestrare un agente Q-learning in FrozenLake, conf
 
 Crea una cartella personale chiamata `lavoro_lab11` e raccogli questi file:
 
-| File | Come ottenerlo |
-| --- | --- |
-| Questo documento | Copia del materiale distribuito dal docente |
-| `11_dataset_preferenze_simulate.csv` | CSV fornito dal docente, da conservare invariato |
-| `rl_frozenlake.py` | Salva una sola volta il primo blocco Python della sezione «Codice fornito» |
-| `sol11_reward_ranking.py` | Salva una sola volta il secondo blocco Python della stessa sezione |
+| File                                 | Come ottenerlo                                                             |
+| ------------------------------------ | -------------------------------------------------------------------------- |
+| Questo documento                     | Copia del materiale distribuito dal docente                                |
+| `11_dataset_preferenze_simulate.csv` | CSV fornito dal docente, da conservare invariato                           |
+| `rl_frozenlake.py`                   | Salva una sola volta il primo blocco Python della sezione «Codice fornito» |
+| `sol11_reward_ranking.py`            | Salva una sola volta il secondo blocco Python della stessa sezione         |
 
 Tutti i comandi seguenti vanno eseguiti **dalla cartella lavoro_lab11**, dove si trovano script e CSV. Questa disposizione funziona anche scaricando i soli materiali del laboratorio.
 
@@ -40,17 +40,17 @@ Non servono GPU, credenziali o modelli da scaricare. FrozenLake è incluso in Gy
 
 Leggi la funzione `make_env` e la configurazione del training nel codice fornito:
 
-| Impostazione | Valore iniziale | Come configurarla |
-| --- | --- | --- |
-| Ambiente | FrozenLake-v1, mappa 4×4 | Mantieni la mappa fornita per il confronto di base |
-| Stati / azioni | 16 / 4 | Dipendono dall'ambiente |
-| Episodi di training | 6000 per seed | Argomento `--episodes` |
-| Seed di training | 42, 43, 44 | Argomento `--seeds` |
-| Cartella dei risultati | rl_output | Argomento `--out`; usa un nome nuovo per ripetere il training |
-| Scivolamento | Disattivato | Aggiungi `--slippery` per l'esperimento aggiuntivo |
-| Alpha / gamma | 0,1 / 0,99 | Valori forniti in `train_one` |
-| Esplorazione | Epsilon da 1 a 0,05 | Riduzione già implementata nel codice |
-| Valutazione | 200 episodi, seed a partire da 10000 | Stesso protocollo per baseline e agente |
+| Impostazione           | Valore iniziale                      | Come configurarla                                             |
+| ---------------------- | ------------------------------------ | ------------------------------------------------------------- |
+| Ambiente               | FrozenLake-v1, mappa 4×4             | Mantieni la mappa fornita per il confronto di base            |
+| Stati / azioni         | 16 / 4                               | Dipendono dall'ambiente                                       |
+| Episodi di training    | 6000 per seed                        | Argomento `--episodes`                                        |
+| Seed di training       | 42, 43, 44                           | Argomento `--seeds`                                           |
+| Cartella dei risultati | rl_output                            | Argomento `--out`; usa un nome nuovo per ripetere il training |
+| Scivolamento           | Disattivato                          | Aggiungi `--slippery` per l'esperimento aggiuntivo            |
+| Alpha / gamma          | 0,1 / 0,99                           | Valori forniti in `train_one`                                 |
+| Esplorazione           | Epsilon da 1 a 0,05                  | Riduzione già implementata nel codice                         |
+| Valutazione            | 200 episodi, seed a partire da 10000 | Stesso protocollo per baseline e agente                       |
 
 La mappa ha righe SFFF, FHFH, FFFH, HFFG: S è la partenza, F il ghiaccio, H una buca e G l'obiettivo. Il reward vale 1 al goal e 0 negli altri casi; il limite è 100 passi.
 
@@ -68,14 +68,14 @@ python rl_frozenlake.py train --out rl_output --episodes 6000 --seeds 42 43 44
 
 Il programma esegue i tre training e, per ciascuno, valuta sia azioni casuali sia la politica Q-learning. Alla fine trovi:
 
-| Percorso | Contenuto da osservare |
-| --- | --- |
-| `rl_output/comparison.json` | Confronto random/Q-learning dei tre seed |
-| `rl_output/seed_42/training.csv` | Ritorno, durata, epsilon e successo durante il training |
-| `rl_output/seed_42/evaluation.csv` | Episodi di valutazione delle due politiche |
-| `rl_output/seed_42/q_table.npy` | Tabella Q appresa e salvata |
-| `rl_output/seed_42/config.json` | Configurazione, versioni e sintesi della valutazione |
-| `rl_output/seed_42/learning_curve.png` | Success rate di training su finestra mobile |
+| Percorso                               | Contenuto da osservare                                  |
+| -------------------------------------- | ------------------------------------------------------- |
+| `rl_output/comparison.json`            | Confronto random/Q-learning dei tre seed                |
+| `rl_output/seed_42/training.csv`       | Ritorno, durata, epsilon e successo durante il training |
+| `rl_output/seed_42/evaluation.csv`     | Episodi di valutazione delle due politiche              |
+| `rl_output/seed_42/q_table.npy`        | Tabella Q appresa e salvata                             |
+| `rl_output/seed_42/config.json`        | Configurazione, versioni e sintesi della valutazione    |
+| `rl_output/seed_42/learning_curve.png` | Success rate di training su finestra mobile             |
 
 Le cartelle seed_43 e seed_44 hanno la stessa struttura. Apri i grafici e controlla nei metadati se i valori Q sono cambiati. Se una cartella output esiste già, il programma la rifiuta per conservare la prova precedente: configura un nuovo nome per la ripetizione.
 
