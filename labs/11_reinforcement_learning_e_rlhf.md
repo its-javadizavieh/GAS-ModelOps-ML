@@ -28,11 +28,11 @@ python -m venv .venv
 Attivalo con `source .venv/bin/activate` su Linux/macOS oppure `.\.venv\Scripts\Activate.ps1` in PowerShell. Scegli il comando adatto alla tua postazione, poi installa le dipendenze e registra le versioni:
 
 ```bash
-python -m pip install "gymnasium>=1.0,<2" numpy matplotlib
+python -m pip install "gymnasium[toy-text]>=1.0,<2" numpy matplotlib
 python -m pip freeze > ambiente.txt
 ```
 
-Non servono GPU, credenziali o modelli da scaricare. FrozenLake è incluso in Gymnasium. Se la postazione è senza rete, usa un ambiente con i pacchetti già predisposti dal docente.
+Non servono GPU, credenziali o modelli da scaricare. FrozenLake è incluso in Gymnasium; l’extra `toy-text` installa anche le dipendenze Pygame per la finestra grafica. Per la demo grafica usa un terminale sul desktop della tua postazione; su server o notebook senza display usa la modalità testuale indicata in S4. Se la postazione è senza rete, usa un ambiente con i pacchetti già predisposti dal docente.
 
 **Documenta:** sistema operativo, versione Python, comando di attivazione e versione dei pacchetti. Un errore di installazione va risolto prima del training.
 
@@ -90,13 +90,23 @@ python rl_frozenlake.py evaluate --run rl_output/seed_42
 python rl_frozenlake.py demo --run rl_output/seed_42
 ```
 
-Il primo comando carica Q da disco, valuta senza aggiornarla e salva `evaluation_reloaded.csv` e `evaluation_reloaded.json`. Il secondo mostra il percorso testuale e salva `episode.txt` nella cartella del seed. Puoi osservare gli altri seed sostituendo il percorso passato a `--run`.
+Il primo comando carica Q da disco, valuta senza aggiornarla e salva `evaluation_reloaded.csv` e `evaluation_reloaded.json`. Il secondo apre **la finestra grafica di FrozenLake**: vedrai la griglia, le buche, la bandiera e l’agente che segue la politica appresa. Ogni movimento è separato da circa mezzo secondo; lo stato finale resta visibile per due secondi, poi la finestra si chiude. Puoi chiuderla prima con il pulsante della finestra oppure interrompere con Ctrl+C nel terminale. Il programma salva comunque il log di stati, azioni e reward in `episode.txt` nella cartella del seed. Il training e la valutazione procedono senza finestra.
+
+Per cambiare il ritmo, aggiungi ad esempio `--delay 1` al comando demo. Per osservare gli altri seed cambia il percorso passato a `--run`. La grafica può variare leggermente con la versione di Gymnasium.
+
+**Postazione senza display:** esegui soltanto questa alternativa al comando demo grafico:
+
+```bash
+python rl_frozenlake.py demo --run rl_output/seed_42 --render ansi
+```
+
+Questa modalità mostra la mappa nel terminale e conserva anche i fotogrammi testuali in `episode.txt`. Se compare un errore relativo a Pygame, ripeti l’installazione di S1 nell’ambiente virtuale attivo; se manca un display, usa l’alternativa testuale.
 
 Confronta il risultato ricaricato con quello registrato dopo il training. Spiega la differenza tra curva di training con esplorazione e valutazione greedy. Una valutazione sulla stessa mappa non dimostra generalizzazione a mappe nuove.
 
 **Esperimento di configurazione:** ripeti il comando di training di S3 con una nuova cartella `--out` e con il flag `--slippery`, poi usa evaluate e demo sulla nuova cartella. Confronta i risultati dichiarando il cambiamento dell'ambiente e mantenendo uguali gli altri parametri.
 
-**Documenta:** file ricaricato, risultato osservato, un episodio e confronto tra configurazioni. Il rendering è testuale e funziona senza finestra grafica.
+**Documenta:** file ricaricato, risultato osservato, un episodio e confronto tra configurazioni. Allega uno screenshot della demo grafica e il log dell’episodio; se usi il fallback testuale, dichiaralo e allega il replay ANSI.
 
 ## S5 - Esegui il confronto tra reward e preferenze
 
@@ -133,6 +143,7 @@ Copia ciascun blocco completo nel file indicato, una sola volta. Mantieni i due 
 import argparse
 import csv
 import json
+import time
 from pathlib import Path
 
 import gymnasium as gym
@@ -141,9 +152,9 @@ import numpy as np
 MAP = ['SFFF', 'FHFH', 'FFFH', 'HFFG']
 
 
-def make_env(slippery=False, render=False):
+def make_env(slippery=False, render_mode=None):
     return gym.make('FrozenLake-v1', desc=MAP, is_slippery=slippery,
-                    max_episode_steps=100, render_mode='ansi' if render else None)
+                    max_episode_steps=100, render_mode=render_mode)
 
 
 def save_csv(path, rows):
@@ -244,28 +255,54 @@ def train_one(folder, seed, episodes, slippery):
     return {'seed': seed, 'nonzero_q_values': config['nonzero_q_values'], **summary}
 
 
-def replay(folder):
+def wait_for_window(seconds):
+    """Keep the graphical window responsive and honor its close button."""
+    import pygame
+    deadline = time.monotonic() + seconds
+    while time.monotonic() < deadline:
+        if any(event.type == pygame.QUIT for event in pygame.event.get()):
+            return False
+        time.sleep(.02)
+    return True
+
+
+def replay(folder, render_mode='human', delay=.5):
+    if not np.isfinite(delay) or not .05 <= delay <= 5:
+        raise ValueError('--delay deve essere fra 0.05 e 5 secondi')
     config = json.loads((folder / 'config.json').read_text())
     q = np.load(folder / 'q_table.npy', allow_pickle=False)
     if q.shape != (16, 4) or not np.isfinite(q).all():
         raise ValueError('Tabella Q non valida')
-    env = make_env(config['is_slippery'], render=True)
-    text = []
+    env = make_env(config['is_slippery'], render_mode=render_mode)
+    text = [f'render_mode={render_mode}, seed=10000, delay={delay}']
     try:
         state, _ = env.reset(seed=10000)
-        text.append(env.render())
+        text.append(f'stato_iniziale={state}')
+        if render_mode == 'ansi':
+            text.append(env.render())
+        else:
+            print('Demo grafica: chiudi la finestra o premi Ctrl+C per interrompere.')
         while True:
+            if render_mode == 'human' and not wait_for_window(delay):
+                text.append('Demo interrotta: finestra chiusa dall’utente.')
+                break
             action = int(np.argmax(q[state]))
             state, reward, terminated, truncated, _ = env.step(action)
             text.append(f'azione={action}, stato={state}, reward={reward}, terminated={terminated}, truncated={truncated}')
-            text.append(env.render())
+            # Human mode draws automatically during reset/step and returns no text.
+            if render_mode == 'ansi':
+                text.append(env.render())
             if terminated or truncated:
+                if render_mode == 'human':
+                    wait_for_window(2.)
                 break
+    except KeyboardInterrupt:
+        text.append('Demo interrotta con Ctrl+C.')
     finally:
         env.close()
-    result = '\n'.join(text)
-    (folder / 'episode.txt').write_text(result, encoding='utf-8')
-    print(result)
+        result = '\n'.join(text)
+        (folder / 'episode.txt').write_text(result, encoding='utf-8')
+        print(result)
 
 
 def main():
@@ -280,6 +317,8 @@ def main():
     p.add_argument('--run', type=Path, required=True)
     p = sub.add_parser('demo')
     p.add_argument('--run', type=Path, required=True)
+    p.add_argument('--render', choices=['human', 'ansi'], default='human')
+    p.add_argument('--delay', type=float, default=.5, help='Pausa fra passi grafici, da 0.05 a 5 secondi')
     args = parser.parse_args()
     if args.command == 'train':
         if args.episodes < 1 or len(set(args.seeds)) != len(args.seeds):
@@ -296,7 +335,7 @@ def main():
         (args.run / 'evaluation_reloaded.json').write_text(json.dumps(summary, indent=2))
         print(json.dumps(summary, indent=2))
     else:
-        replay(args.run)
+        replay(args.run, args.render, args.delay)
 
 
 if __name__ == '__main__':
