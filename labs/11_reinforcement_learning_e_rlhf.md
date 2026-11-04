@@ -22,10 +22,10 @@ Lavora in una cartella personale sotto `materiali_didattici/`, chiamata `lavoro_
 
 Caso su carta: i numeri seguenti sono una scheda di esercizio, non risultati gia misurati.
 
-| Risposta | Correttezza (0-1) | Parole |
-| --- | ---: | ---: |
-| A completa | 1 | 80 |
-| B incompleta | 0.6 | 10 |
+| Risposta     | Correttezza (0-1) | Parole |
+| ------------ | ----------------: | -----: |
+| A completa   |                 1 |     80 |
+| B incompleta |               0.6 |     10 |
 
 Con reward = correttezza - 0.01 per parola, quale risposta vince? E necessariamente la preferita dall'utente?
 
@@ -83,13 +83,13 @@ Proponi una modifica della rubrica e descrivi preferenze -> reward model -> aggi
 
 ## Cosa consegnare e come valutarlo
 
-| Criterio | Evidenza richiesta |
-| --- | --- |
-| Costruzione | Componenti del flusso e responsabilita di ciascuno |
-| Esecuzione | Input, output ed esito osservati, con versione/configurazione |
-| Prova negativa | Un caso che deve fallire o contraddire l'ipotesi iniziale |
-| Ragionamento | Confronto tra previsione iniziale e risultato, con una spiegazione |
-| Limiti | Parti eseguite, simulate e non eseguite indicate separatamente |
+| Criterio       | Evidenza richiesta                                                 |
+| -------------- | ------------------------------------------------------------------ |
+| Costruzione    | Componenti del flusso e responsabilita di ciascuno                 |
+| Esecuzione     | Input, output ed esito osservati, con versione/configurazione      |
+| Prova negativa | Un caso che deve fallire o contraddire l'ipotesi iniziale          |
+| Ragionamento   | Confronto tra previsione iniziale e risultato, con una spiegazione |
+| Limiti         | Parti eseguite, simulate e non eseguite indicate separatamente     |
 
 Confrontare punteggi e preferenze non addestra un reward model o una politica RL. Il lab prepara i dati e analizza il segnale che un ciclo RLHF potrebbe usare.
 
