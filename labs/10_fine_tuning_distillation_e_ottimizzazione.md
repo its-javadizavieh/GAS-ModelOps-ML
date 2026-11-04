@@ -79,9 +79,9 @@ Lavora in una cartella personale sotto `materiali_didattici/`, chiamata `lavoro_
 Caso su carta: i numeri seguenti sono una scheda di esercizio, non risultati gia misurati.
 
 | Modello | Accuracy target | Byte serializzati | Latenza ms/batch |
-| --- | ---: | ---: | ---: |
-| teacher | 0.94 | 90000 | 3.2 |
-| student | 0.91 | 18000 | 0.7 |
+| ------- | --------------: | ----------------: | ---------------: |
+| teacher |            0.94 |             90000 |              3.2 |
+| student |            0.91 |             18000 |              0.7 |
 
 Il requisito e accuracy >= 0.90 e latenza <= 1 ms/batch. Quale modello e ammissibile? Qual e la perdita in punti percentuali?
 
@@ -139,13 +139,13 @@ Calcola perdita di accuracy, riduzione dimensione e fedelta dello student al tea
 
 ## Cosa consegnare e come valutarlo
 
-| Criterio | Evidenza richiesta |
-| --- | --- |
-| Costruzione | Componenti del flusso e responsabilita di ciascuno |
-| Esecuzione | Input, output ed esito osservati, con versione/configurazione |
-| Prova negativa | Un caso che deve fallire o contraddire l'ipotesi iniziale |
-| Ragionamento | Confronto tra previsione iniziale e risultato, con una spiegazione |
-| Limiti | Parti eseguite, simulate e non eseguite indicate separatamente |
+| Criterio       | Evidenza richiesta                                                 |
+| -------------- | ------------------------------------------------------------------ |
+| Costruzione    | Componenti del flusso e responsabilita di ciascuno                 |
+| Esecuzione     | Input, output ed esito osservati, con versione/configurazione      |
+| Prova negativa | Un caso che deve fallire o contraddire l'ipotesi iniziale          |
+| Ragionamento   | Confronto tra previsione iniziale e risultato, con una spiegazione |
+| Limiti         | Parti eseguite, simulate e non eseguite indicate separatamente     |
 
 Allenare da zero una forest piu grande e riaddestramento/configurazione, non fine-tuning. In questo lab il teacher prosegue davvero l'apprendimento della baseline tramite aggiornamenti incrementali.
 
