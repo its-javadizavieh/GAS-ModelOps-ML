@@ -19,13 +19,23 @@ Crea una cartella personale chiamata `lavoro_lab12` con questi file:
 
 Esegui tutti i comandi **dalla cartella lavoro_lab12**, con script e CSV nella stessa cartella. Non occorre scaricare tutto il repository.
 
-Usa Python 3.12 e crea l'ambiente virtuale:
+Usa Python 3.12. **Crea l’ambiente virtuale in un percorso senza spazi**: il launcher di KFP può fallire se il percorso dell’interprete contiene spazi. La cartella dei file del progetto può invece contenere spazi.
+
+Linux/macOS:
 
 ```bash
-python -m venv .venv
+python -m venv ~/lab12_venv
+source ~/lab12_venv/bin/activate
 ```
 
-Attivalo con `source .venv/bin/activate` su Linux/macOS oppure `.\.venv\Scripts\Activate.ps1` in PowerShell. Poi installa le dipendenze e registra le versioni:
+PowerShell su Windows:
+
+```powershell
+py -3.12 -m venv C:\venvs\lab12
+C:\venvs\lab12\Scripts\Activate.ps1
+```
+
+Poi, dalla cartella `lavoro_lab12`, installa le dipendenze e registra le versioni:
 
 ```bash
 python -m pip install numpy scikit-learn "mlflow>=3,<4" "kfp>=2.8,<3"
@@ -328,6 +338,7 @@ if __name__ == '__main__':
 """Compile and execute a three-step Kubeflow pipeline locally, without a cluster."""
 import argparse
 import json
+import sys
 from pathlib import Path
 
 from kfp import compiler, dsl, local
@@ -434,6 +445,8 @@ def main():
     parser.add_argument('--out', type=Path, default=Path('kfp_output'))
     parser.add_argument('--compile-only', action='store_true')
     args = parser.parse_args()
+    if not args.compile_only and any(char.isspace() for char in sys.executable):
+        raise RuntimeError('KFP: ricrea l’ambiente in un percorso senza spazi come indicato in S1.')
     root = args.out.resolve()
     root.mkdir(parents=True, exist_ok=False)
     compiler.Compiler().compile(wine_pipeline, package_path=str(root / 'wine_pipeline.yaml'))
