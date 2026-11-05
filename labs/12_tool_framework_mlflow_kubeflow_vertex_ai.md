@@ -19,26 +19,17 @@ Crea una cartella personale chiamata `lavoro_lab12` con questi file:
 
 Esegui tutti i comandi **dalla cartella lavoro_lab12**, con script e CSV nella stessa cartella. Non occorre scaricare tutto il repository.
 
-Usa Python 3.12. **Crea l’ambiente virtuale in un percorso senza spazi**: il launcher di KFP può fallire se il percorso dell’interprete contiene spazi. La cartella dei file del progetto può invece contenere spazi.
-
-Linux/macOS:
+Usa Python 3.12 e un terminale Linux/macOS; su Windows usa WSL2 per eseguire anche KFP, che avvia una shell POSIX. **Crea l’ambiente virtuale in un percorso senza spazi**: il launcher di KFP può fallire se il percorso dell’interprete contiene spazi. I file del progetto possono invece restare in una cartella con spazi.
 
 ```bash
 python -m venv ~/lab12_venv
 source ~/lab12_venv/bin/activate
 ```
 
-PowerShell su Windows:
-
-```powershell
-py -3.12 -m venv C:\venvs\lab12
-C:\venvs\lab12\Scripts\Activate.ps1
-```
-
 Poi, dalla cartella `lavoro_lab12`, installa le dipendenze e registra le versioni:
 
 ```bash
-python -m pip install numpy scikit-learn "mlflow>=3,<4" "kfp>=2.8,<3"
+python -m pip install numpy==2.5.4 scikit-learn==1.9.1 "mlflow==3.18.0" "kfp==2.18.0"
 python -m pip freeze > ambiente.txt
 ```
 
@@ -81,7 +72,7 @@ In un **secondo terminale**, dalla stessa cartella e con lo stesso ambiente atti
 python mlflow_tracking.py ui
 ```
 
-Apri la UI locale sulla porta 5000. Il comando usa lo stesso database assoluto del training, anche quando il percorso contiene spazi. Seleziona le quattro run di session.json e osserva parametri, metriche e artefatti. Il processo UI resta attivo fino a Ctrl+C.
+Apri http://127.0.0.1:5000. Se compare la vista GenAI, passa a **Model training → lab12-esperimenti-locali → Runs**. Apri una run per vedere **Metrics**, **Parameters** e **Artifacts**. Il comando usa lo stesso database assoluto del training, anche quando il percorso contiene spazi. Seleziona le quattro run di session.json e osserva parametri, metriche e artefatti. Il processo UI resta attivo fino a Ctrl+C.
 
 Nel terminale di lavoro esegui il confronto tramite client:
 
